@@ -1,9 +1,9 @@
 
 # DODAS client
 
-[![Build Status](https://travis-ci.org/Cloud-PG/dodas-go-client.svg?branch=master)](https://travis-ci.org/Cloud-PG/dodas-go-client)
+[![Build Status](https://travis-ci.org/DODAS-TS/dodas-go-client.svg?branch=master)](https://travis-ci.org/DODAS-TS/dodas-go-client)
 
-[Reference Manual](https://cloud-pg.github.io/dodas-go-client/dodas)
+[Reference Manual](https://dodas-ts.github.io/dodas-go-client/dodas)
 
 ## Quick start
 
