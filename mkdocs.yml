@@ -6,5 +6,5 @@ theme:
   palette:
     primary: 'Deep Purple'
     accent: 'Green'
-repo_name: 'dodas-go-client/dodas-go-client'
-repo_url: 'https://github.com/Cloud-PG/dodas-go-client'
+repo_name: 'dodas-ts/dodas-go-client'
+repo_url: 'https://github.com/DODAS-TS/dodas-go-client'
