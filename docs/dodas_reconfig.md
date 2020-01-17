@@ -1,19 +1,19 @@
-## dodas version
+## dodas reconfig
 
-Client version
+restart cluster configuration
 
 ### Synopsis
 
-Client version
+restart cluster configuration
 
 ```
-dodas version [flags]
+dodas reconfig <infID> [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for reconfig
 ```
 
 ### Options inherited from parent commands

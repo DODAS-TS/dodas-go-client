@@ -1,19 +1,19 @@
-## dodas version
+## dodas reboot
 
-Client version
+reboot a vm in the cluster
 
 ### Synopsis
 
-Client version
+reboot a vm in the cluster
 
 ```
-dodas version [flags]
+dodas reboot <infID> <vmID> [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for reboot
 ```
 
 ### Options inherited from parent commands

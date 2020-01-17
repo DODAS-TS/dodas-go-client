@@ -46,8 +46,10 @@ func PrepareAuthHeaders() string {
 		field := fields.Field(i)
 		value := values.Field(i)
 
-		keyTemp := fmt.Sprintf("%v = %v", decodeFields[field.Name], value)
-		authHeaderCloudList = append(authHeaderCloudList, keyTemp)
+		if value.Interface() != "" {
+			keyTemp := fmt.Sprintf("%v = %v", decodeFields[field.Name], value)
+			authHeaderCloudList = append(authHeaderCloudList, keyTemp)
+		}
 	}
 
 	authHeaderCloud := strings.Join(authHeaderCloudList, ";")
@@ -140,11 +142,6 @@ dodas validate --template my_tosca_template.yml
 """`,
 
 	Run: func(cmd *cobra.Command, args []string) {
-		if version {
-			fmt.Println("dodas client version:", VersionString)
-		} else {
-			fmt.Println("Use 'dodas [command] --help' for more information about a command.")
-		}
 	},
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
@@ -208,7 +205,7 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		//fmt.Println("Using config file:", viper.ConfigFileUsed())
 		clientConf.getConf(viper.ConfigFileUsed())
 		//if clientConf.im.Password == "" {
 		//	fmt.Println("No password")

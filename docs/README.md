@@ -10,10 +10,17 @@
 Download the binary from the latest release on [github](https://github.com/Cloud-PG/dodas-go-client/releases). For instance:
 
 ```bash
-wget https://github.com/Cloud-PG/dodas-go-client/releases/download/v0.3.0/dodas.zip
+wget https://github.com/Cloud-PG/dodas-go-client/releases/download/v0.3.3/dodas.zip
 unzip dodas.zip
 cp dodas /usr/local/bin
 ```
+
+> **CLI autocomplete**
+>
+> Autocompletion for bash and zsh is supported
+>
+> - **bash** add the following line to ~/.bashrc: `. <(dodas autocomplete)`
+> - **zsh** add the following line to ~/.zshrc: `source <(dodas zsh-autocomplete)`
 
 You can find now a template for creating your client configuration file in [config/client_config.yaml](https://raw.githubusercontent.com/Cloud-PG/dodas-go-client/master/config/client_config.yaml). Note that by default the client will look for `$HOME/.dodas.yaml`.
 
@@ -23,16 +30,25 @@ Now you are ready to go. For instance you can validate a tosca template like thi
 dodas validate --template tests/tosca/valid_template.yml
 ```
 
+> **Tip:** you can find supported tosca templates for applications and k8s deployments on the [DODAS template repo](https://github.com/DODAS-TS/dodas-templates)
+
 or you can create a cluster through the InfrastructureManager configured in your configuration file:
 
 ```bash
-dodas create --config my_client_conf.yaml --template my_template.yaml
+dodas create --config my_client_conf.yaml my_template.yaml
 ```
 
 To list the Infrastructure ID of all your deployments:
 
 ```bash
 dodas list infIDs
+```
+
+You can eventually login into a vm in created cluster that has a public IP address with:
+
+```bash
+dodas login <infID> <vmID>
+# e.g. dodas login cb585e5c-33b6-11ea-8776-0242ac150003 0
 ```
 
 ## Using docker image

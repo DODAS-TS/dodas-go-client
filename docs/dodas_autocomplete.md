@@ -1,19 +1,19 @@
-## dodas version
+## dodas autocomplete
 
-Client version
+Generate script for bash autocomplete
 
 ### Synopsis
 
-Client version
+add the following line to ~/.bashrc: . <(dodas autocomplete)
 
 ```
-dodas version [flags]
+dodas autocomplete [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for autocomplete
 ```
 
 ### Options inherited from parent commands

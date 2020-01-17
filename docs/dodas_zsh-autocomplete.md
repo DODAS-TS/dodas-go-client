@@ -1,19 +1,19 @@
-## dodas version
+## dodas zsh-autocomplete
 
-Client version
+Generate script for zsh autocomplete
 
 ### Synopsis
 
-Client version
+add the following line to ~/.bashrc: source <(dodas zsh-autocomplete)
 
 ```
-dodas version [flags]
+dodas zsh-autocomplete [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for version
+  -h, --help   help for zsh-autocomplete
 ```
 
 ### Options inherited from parent commands

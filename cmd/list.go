@@ -69,10 +69,10 @@ func GetVMs(infID string) ([]string, error) {
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
+	Args:  cobra.MinimumNArgs(1),
 	Short: "Wrapper function for list operations",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("list called")
 	},
 }
 
