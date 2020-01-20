@@ -10,7 +10,7 @@
 Download the binary from the latest release on [github](https://github.com/DODAS-TS/dodas-go-client/releases). For instance:
 
 ```bash
-wget https://github.com/Cloud-PG/dodas-go-client/releases/download/v0.3.3/dodas.zip
+wget https://github.com/DODAS-TS/dodas-go-client/releases/download/v0.3.3/dodas.zip
 unzip dodas.zip
 cp dodas /usr/local/bin
 ```
@@ -22,7 +22,7 @@ cp dodas /usr/local/bin
 > - **bash** add the following line to ~/.bashrc: `. <(dodas autocomplete)`
 > - **zsh** add the following line to ~/.zshrc: `source <(dodas zsh-autocomplete)`
 
-You can find now a template for creating your client configuration file in [config/client_config.yaml](https://raw.githubusercontent.com/Cloud-PG/dodas-go-client/master/config/client_config.yaml). Note that by default the client will look for `$HOME/.dodas.yaml`.
+You can find now a template for creating your client configuration file in [config/client_config.yaml](https://raw.githubusercontent.com/DODAS-TS/dodas-go-client/master/config/client_config.yaml). Note that by default the client will look for `$HOME/.dodas.yaml`.
 
 Now you are ready to go. For instance you can validate a tosca template like this:
 
