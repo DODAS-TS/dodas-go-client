@@ -16,10 +16,7 @@ export GO111MODULE=on
 # Force 64 bit architecture
 export GOARCH=amd64
 
-all: build-travis test
-
-build-travis:
-	$(GOBUILD) -o $(BINARY_NAME)
+all: build test
 
 build:
 	$(GOBUILD) -mod vendor -o $(BINARY_NAME)
