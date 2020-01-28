@@ -15,6 +15,8 @@ unzip dodas.zip
 cp dodas /usr/local/bin
 ```
 
+In alternative you can also run the dodas command inside the client container `dodasts/dodas-client:v0.3.3`.
+
 > **CLI autocomplete**
 >
 > Autocompletion for bash and zsh is supported

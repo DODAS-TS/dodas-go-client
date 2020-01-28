@@ -86,19 +86,19 @@ type confCloud struct {
 	Password      string `yaml:"password"`
 	Host          string `yaml:"host"`
 	Tenant        string `yaml:"tenant"`
-	AuthUrl       string `yaml:"auth_url"`
+	AuthURL       string `yaml:"auth_url,omitempty"`
 	AuthVersion   string `yaml:"auth_version"`
-	Domain        string `yaml:"domain"`
-	ServiceRegion string `yaml:"service_region"`
+	Domain        string `yaml:"domain,omitempty"`
+	ServiceRegion string `yaml:"service_region,omitempty"`
 }
 
 type confIM struct {
 	ID       string `yaml:"id"`
 	Type     string `yaml:"type"`
 	Host     string `yaml:"host"`
-	Username string `yaml:"username"`
-	Password string `yaml:"password"`
-	Token    string `yaml:"token"`
+	Username string `yaml:"username,omitempty"`
+	Password string `yaml:"password,omitempty"`
+	Token    string `yaml:"token,omitempty"`
 }
 
 type conf struct {
