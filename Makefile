@@ -16,7 +16,10 @@ export GO111MODULE=on
 # Force 64 bit architecture
 export GOARCH=amd64
 
-all: build test
+all: build-travis test
+
+build-travis:
+	$(GOBUILD) -o $(BINARY_NAME)
 
 build:
 	$(GOBUILD) -mod vendor -o $(BINARY_NAME)
@@ -52,7 +55,7 @@ tidy:
 	$(GOCMD) mod vendor
 
 docker-bin-build:
-	docker run --rm -it -v ${PWD}:/go -w /go/ golang:1.12.1 go build -mod vendor -o "$(BINARY_NAME)" -v
+	docker run --rm -it -v ${PWD}:/go -w /go/ golang:1.13.6 go build -mod vendor -o "$(BINARY_NAME)" -v
 
 docker-img-build:
 	docker build . -t dodas
