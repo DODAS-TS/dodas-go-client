@@ -1,4 +1,4 @@
-module github.com/Cloud-PG/dodas-go-client
+module github.com/dodas-ts/dodas-go-client
 
 go 1.12
 
