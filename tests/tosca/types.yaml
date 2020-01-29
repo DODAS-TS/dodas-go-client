@@ -1340,7 +1340,7 @@ node_types:
         default: 30s
     artifacts:
       cms_config_role:
-        file: cloud-pg.ansible_role_metricbeat
+        file: dodas-ts.ansible_role_metricbeat
         type: tosca.artifacts.AnsibleGalaxy.role
     interfaces:
       Standard:

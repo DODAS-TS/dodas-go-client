@@ -17,7 +17,7 @@ package main
 import (
 	"os"
 
-	"github.com/Cloud-PG/dodas-go-client/cmd"
+	"github.com/dodas-ts/dodas-go-client/cmd"
 )
 
 func main() {

@@ -10,7 +10,7 @@ GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
 BINARY_NAME=dodas
-REPO=github.com/Cloud-PG/dodas-go-client
+REPO=github.com/dodas-ts/dodas-go-client
 
 export GO111MODULE=on
 # Force 64 bit architecture
