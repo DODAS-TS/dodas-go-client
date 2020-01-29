@@ -1,13 +1,14 @@
 module github.com/dodas-ts/dodas-go-client
 
-go 1.12
+go 1.13
 
 require (
-	github.com/dodas-ts/dodas-go-client v0.3.5
+	github.com/blang/semver v3.5.1+incompatible // indirect
 	github.com/dciangot/toscalib v0.0.0-20190329085732-12f4d4a283e4
+	github.com/kenjones-cisco/mergo v0.0.0-20161024152414-0149f50ea824 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/spf13/cobra v0.0.5
-	github.com/spf13/viper v1.6.0
-	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
-	gopkg.in/yaml.v2 v2.2.4
+	github.com/spf13/viper v1.6.2
+	golang.org/x/crypto v0.0.0-20200128174031-69ecbb4d6d5d
+	gopkg.in/yaml.v2 v2.2.8
 )
