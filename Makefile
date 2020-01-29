@@ -19,10 +19,10 @@ export GOARCH=amd64
 all: build test
 
 build:
-	$(GOBUILD) -mod vendor -o $(BINARY_NAME)
+	$(GOBUILD) -o $(BINARY_NAME)
 
 build-debug:
-	$(GOBUILD_DBG) -mod vendor -o $(BINARY_NAME) -v
+	$(GOBUILD_DBG) -o $(BINARY_NAME) -v
 
 doc:
 	cp README.md docs/README.md
@@ -32,7 +32,7 @@ publish-doc:
 	$(DOCBIN) gh-deploy
 
 test: build
-	$(GOTEST) -mod vendor -v ./...
+	$(GOTEST) -v ./...
 	./$(BINARY_NAME) validate --template tests/tosca/valid_template.yml
 	./$(BINARY_NAME) validate --template tests/tosca/broken_template_type.yaml
 	./$(BINARY_NAME) validate --template tests/tosca/broken_template_node.yaml
@@ -49,7 +49,6 @@ install:
 
 tidy:
 	$(GOCMD) mod tidy
-	$(GOCMD) mod vendor
 
 docker-bin-build:
 	docker run --rm -it -v ${PWD}:/go -w /go/ golang:1.13.6 go build -mod vendor -o "$(BINARY_NAME)" -v
