@@ -115,6 +115,7 @@ var infIDsCmd = &cobra.Command{
 
 		body, _ := ioutil.ReadAll(resp.Body)
 
+		// TODO: use JSON!
 		stringList := strings.Split(string(body), "\n")
 
 		fmt.Print("Infrastructure IDs:\n")

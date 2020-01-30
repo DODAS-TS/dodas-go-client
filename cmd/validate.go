@@ -15,102 +15,28 @@
 package cmd
 
 import (
-	"bytes"
 	"fmt"
-	"io/ioutil"
 
-	"github.com/dciangot/toscalib"
 	"github.com/spf13/cobra"
 )
 
-// Validate TOSCA template
-func Validate() error {
-	fmt.Println("validate called")
-	var t toscalib.ServiceTemplateDefinition
-	template, err := ioutil.ReadFile(templateFile)
-	if err != nil {
-		return err
-	}
-
-	err = t.Parse(bytes.NewBuffer(template))
-	if err != nil {
-		fmt.Printf("ERROR: Invalid template for %v", err)
-		return err
-	}
-	// t.TopologyTemplate.NodeTemplates
-
-	//t.TopologyTemplate.NodeTemplates["Type"]
-
-	//typeList := make(map[string][]string)
-
-	inputs := make(map[string][]string)
-	templs := make(map[string][]string)
-
-	for name := range t.TopologyTemplate.NodeTemplates {
-		//fmt.Println(name)
-
-		for templ := range t.TopologyTemplate.NodeTemplates[name].Properties {
-			//fmt.Println(templ)
-			value := t.TopologyTemplate.NodeTemplates[name].Properties[templ].Value
-			ft := t.TopologyTemplate.NodeTemplates[name].Properties[templ].Function
-			if value != "" && value != nil || ft != "" {
-				templs[name] = append(templs[name], templ)
-			}
-			//fmt.Print("-----\n")
-		}
-
-		//fmt.Print("++++\n")
-		derived := t.NodeTypes[t.TopologyTemplate.NodeTemplates[name].Type].DerivedFrom
-		for derived != "" {
-			for interf := range t.NodeTypes[derived].Properties {
-				//fmt.Println(interf)
-				inputs[name] = append(inputs[name], interf)
-			}
-			//fmt.Println(derived)
-			derived = t.NodeTypes[derived].DerivedFrom
-		}
-
-		for interf := range t.NodeTypes[t.TopologyTemplate.NodeTemplates[name].Type].Properties {
-			inputs[name] = append(inputs[name], interf)
-		}
-
-	}
-	//fmt.Println(inputs)
-	//fmt.Println(templs)
-
-	for node := range templs {
-		//fmt.Println(node)
-		for nodeParam := range templs[node] {
-			isPresent := false
-			for param := range inputs[node] {
-
-				if inputs[node][param] == templs[node][nodeParam] {
-					isPresent = true
-				}
-			}
-			//fmt.Printf("%v %v\n", templs[node][nodeParam], isPresent)
-			if !isPresent {
-				fmt.Printf("%v not defined in type %v \n", templs[node][nodeParam], t.TopologyTemplate.NodeTemplates[node].Type)
-				return fmt.Errorf("ERROR: Invalid template for %v", node)
-			}
-		}
-		//fmt.Print("-----\n")
-	}
-
-	fmt.Print("Template OK\n")
-	return nil
-}
-
 // validateCmd represents the validate command
 var validateCmd = &cobra.Command{
-	Use:   "validate",
+	Use:   "validate <templatefile>",
 	Short: "Validate your tosca template",
 	Long: `Example:
 dodas validate --template my_tosca_template.yml`,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := Validate()
-		if err != nil {
-			fmt.Println(err)
+		if args[0] == "" {
+			err := Validate(templateFile)
+			if err != nil {
+				fmt.Println(err)
+			}
+		} else {
+			err := Validate(args[0])
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
 	},
 }

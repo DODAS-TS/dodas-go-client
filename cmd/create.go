@@ -42,7 +42,7 @@ var createCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, temp := range args {
 			templateFile = temp
-			err := Validate()
+			err := Validate(templateFile)
 			if err != nil {
 				panic(err)
 			}
