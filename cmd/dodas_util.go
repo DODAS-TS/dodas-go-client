@@ -38,13 +38,7 @@ type StatusStruct struct {
 }
 
 // CreateInf is a wrapper for Infrastructure creation
-func (clientConf Conf) CreateInf(imURL string, templateFile string) (infID string, err error) {
-
-	fmt.Printf("Template: %v \n", string(templateFile))
-	template, err := ioutil.ReadFile(templateFile)
-	if err != nil {
-		return "", err
-	}
+func (clientConf Conf) CreateInf(imURL string, template []byte) (infID string, err error) {
 
 	authHeader := PrepareAuthHeaders(clientConf)
 

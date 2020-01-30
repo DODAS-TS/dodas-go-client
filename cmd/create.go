@@ -15,6 +15,9 @@
 package cmd
 
 import (
+	"fmt"
+	"io/ioutil"
+
 	"github.com/spf13/cobra"
 )
 
@@ -46,7 +49,14 @@ var createCmd = &cobra.Command{
 			if err != nil {
 				panic(err)
 			}
-			_, err = clientConf.CreateInf(string(clientConf.Im.Host), templateFile)
+
+			fmt.Printf("Template: %v \n", string(templateFile))
+			template, err := ioutil.ReadFile(templateFile)
+			if err != nil {
+				panic(err)
+			}
+
+			_, err = clientConf.CreateInf(string(clientConf.Im.Host), template)
 			if err != nil {
 				panic(err)
 			}
