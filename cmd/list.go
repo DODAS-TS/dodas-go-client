@@ -36,7 +36,7 @@ func GetVMs(infID string) ([]string, error) {
 
 	req.Header.Set("Content-Type", "application/json")
 
-	authHeader := PrepareAuthHeaders()
+	authHeader := PrepareAuthHeaders(clientConf)
 
 	req.Header.Set("Authorization", authHeader)
 
@@ -93,7 +93,7 @@ var infIDsCmd = &cobra.Command{
 
 		req.Header.Set("Content-Type", "application/json")
 
-		authHeader := PrepareAuthHeaders()
+		authHeader := PrepareAuthHeaders(clientConf)
 
 		req.Header.Set("Authorization", authHeader)
 
@@ -154,7 +154,7 @@ var infosCmd = &cobra.Command{
 
 			req.Header.Set("Content-Type", "application/json")
 
-			authHeader := PrepareAuthHeaders()
+			authHeader := PrepareAuthHeaders(clientConf)
 
 			req.Header.Set("Authorization", authHeader)
 

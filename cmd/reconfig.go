@@ -10,13 +10,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-
 // reconfigCmd restart cluster configuration
 var reconfigCmd = &cobra.Command{
 	Use:   "reconfig <infID>",
 	Args:  cobra.MinimumNArgs(1),
 	Short: "restart cluster configuration",
-	Long: ``,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("status called")
 
@@ -29,7 +28,7 @@ var reconfigCmd = &cobra.Command{
 
 		req.Header.Set("Content-Type", "application/json")
 
-		authHeader := PrepareAuthHeaders()
+		authHeader := PrepareAuthHeaders(clientConf)
 
 		req.Header.Set("Authorization", authHeader)
 

@@ -23,9 +23,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/terminal"
-
 	"github.com/spf13/cobra"
 )
 
@@ -61,7 +61,6 @@ func getPubIP(asciiBody string) (string, error) {
 	return pubIPTmp, nil
 }
 
-
 // loginCmd represets the login command
 var loginCmd = &cobra.Command{
 	Use:   "login <infID> <vmID>",
@@ -93,7 +92,7 @@ var loginCmd = &cobra.Command{
 
 		req.Header.Set("Content-Type", "application/json")
 
-		authHeader := PrepareAuthHeaders()
+		authHeader := PrepareAuthHeaders(clientConf)
 
 		req.Header.Set("Authorization", authHeader)
 
@@ -144,7 +143,7 @@ var loginCmd = &cobra.Command{
 			User:            "cloudadm",
 			HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 			Auth: []ssh.AuthMethod{
-		 		// Use the PublicKeys method for remote authentication.
+				// Use the PublicKeys method for remote authentication.
 				ssh.PublicKeys(signer),
 			},
 		}
@@ -166,18 +165,18 @@ var loginCmd = &cobra.Command{
 			fmt.Printf("terminal make raw: %s", err)
 		}
 		defer terminal.Restore(fd, state)
-	
+
 		w, h, err := terminal.GetSize(fd)
 		if err != nil {
 			fmt.Printf("terminal get size: %s", err)
 		}
-	
+
 		modes := ssh.TerminalModes{
 			ssh.ECHO:          1,
 			ssh.TTY_OP_ISPEED: 14400,
 			ssh.TTY_OP_OSPEED: 14400,
 		}
-	
+
 		term := os.Getenv("TERM")
 		if term == "" {
 			term = "xterm-256color"
@@ -185,15 +184,15 @@ var loginCmd = &cobra.Command{
 		if err := session.RequestPty(term, h, w, modes); err != nil {
 			fmt.Printf("session xterm: %s", err)
 		}
-	
+
 		session.Stdout = os.Stdout
 		session.Stderr = os.Stderr
 		session.Stdin = os.Stdin
-	
+
 		if err := session.Shell(); err != nil {
 			fmt.Printf("session shell: %s", err)
 		}
-	
+
 		if err := session.Wait(); err != nil {
 			if e, ok := err.(*ssh.ExitError); ok {
 				switch e.ExitStatus() {

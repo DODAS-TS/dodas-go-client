@@ -15,13 +15,6 @@
 package cmd
 
 import (
-	"bytes"
-	"fmt"
-	"io/ioutil"
-	"net/http"
-	"strings"
-	"time"
-
 	"github.com/spf13/cobra"
 )
 
@@ -39,59 +32,6 @@ var decodeFields = map[string]string{
 	"ServiceRegion": "service_region",
 }
 
-func sendRequest() {
-
-	fmt.Printf("Template: %v \n", string(templateFile))
-	template, err := ioutil.ReadFile(templateFile)
-	if err != nil {
-		panic(err)
-	}
-
-	///fmt.Println(string(template))
-	client := &http.Client{
-		Timeout: 300 * time.Second,
-	}
-	fmt.Println("Submitting request to  : ", clientConf.Im.Host)
-
-	req, err := http.NewRequest("POST", string(clientConf.Im.Host), bytes.NewBuffer(template))
-
-	req.Header.Set("Content-Type", "text/yaml")
-
-	authHeader := PrepareAuthHeaders()
-
-	req.Header.Set("Authorization", authHeader)
-
-	var request []string
-	for name, headers := range req.Header {
-		name = strings.ToLower(name)
-		for _, h := range headers {
-			request = append(request, fmt.Sprintf("%v: %v", name, h))
-		}
-	}
-
-	request = append(request, fmt.Sprint("\n"))
-	//fmt.Printf(strings.Join(request, "\n"))
-
-	resp, err := client.Do(req)
-	if err != nil {
-		panic(err)
-	}
-
-	body, _ := ioutil.ReadAll(resp.Body)
-
-	stringSplit := strings.Split(string(body), "/")
-
-	if resp.StatusCode == 200 {
-		fmt.Println("InfrastructureID: ", stringSplit[len(stringSplit)-1])
-	} else {
-		fmt.Println("ERROR:\n", string(body))
-		return
-	}
-
-	// TODO: create .dodas dir and save infID
-
-}
-
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create <Template1> ... <TemplateN>",
@@ -106,7 +46,10 @@ var createCmd = &cobra.Command{
 			if err != nil {
 				panic(err)
 			}
-			sendRequest()
+			err = CreateInf(string(clientConf.Im.Host), templateFile, clientConf)
+			if err != nil {
+				panic(err)
+			}
 		}
 	},
 }

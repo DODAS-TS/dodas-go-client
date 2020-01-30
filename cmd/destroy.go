@@ -15,53 +15,8 @@
 package cmd
 
 import (
-	"fmt"
-	"io/ioutil"
-	"net/http"
-	"strings"
-	"time"
-
 	"github.com/spf13/cobra"
 )
-
-func destroyInf() {
-
-	client := &http.Client{
-		Timeout: 300 * time.Second,
-	}
-	fmt.Println("Submitting request to  : ", clientConf.Im.Host)
-
-	req, err := http.NewRequest("DELETE", string(clientConf.Im.Host)+"/"+infID, nil)
-
-	authHeader := PrepareAuthHeaders()
-
-	req.Header.Set("Authorization", authHeader)
-
-	var request []string
-	for name, headers := range req.Header {
-		name = strings.ToLower(name)
-		for _, h := range headers {
-			request = append(request, fmt.Sprintf("%v: %v", name, h))
-		}
-	}
-
-	request = append(request, fmt.Sprint("\n"))
-	//fmt.Printf(strings.Join(request, "\n"))
-
-	resp, err := client.Do(req)
-	if err != nil {
-		panic(err)
-	}
-
-	body, _ := ioutil.ReadAll(resp.Body)
-
-	if resp.StatusCode == 200 {
-		fmt.Println("Removed infrastracture ID: ", infID)
-	} else {
-		fmt.Println("ERROR:\n", string(body))
-		return
-	}
-}
 
 // destroyCmd represents the destroy command
 var destroyCmd = &cobra.Command{
@@ -73,7 +28,10 @@ var destroyCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, inf := range args {
 			infID = inf
-			destroyInf()
+			err := DestroyInf(string(clientConf.Im.Host), infID, clientConf)
+			if err != nil {
+				panic(err)
+			}
 		}
 	},
 }

@@ -19,8 +19,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"reflect"
-	"strings"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
@@ -34,52 +32,8 @@ var cfgFile string
 var templateFile string
 var infID string
 
-// PrepareAuthHeaders ..
-func PrepareAuthHeaders() string {
-
-	var authHeaderCloudList []string
-
-	fields := reflect.TypeOf(clientConf.Cloud)
-	values := reflect.ValueOf(clientConf.Cloud)
-
-	for i := 0; i < fields.NumField(); i++ {
-		field := fields.Field(i)
-		value := values.Field(i)
-
-		if value.Interface() != "" {
-			keyTemp := fmt.Sprintf("%v = %v", decodeFields[field.Name], value)
-			authHeaderCloudList = append(authHeaderCloudList, keyTemp)
-		}
-	}
-
-	authHeaderCloud := strings.Join(authHeaderCloudList, ";")
-
-	var authHeaderIMList []string
-
-	fields = reflect.TypeOf(clientConf.Im)
-	values = reflect.ValueOf(clientConf.Im)
-
-	for i := 0; i < fields.NumField(); i++ {
-		field := fields.Field(i)
-		if decodeFields[field.Name] != "host" {
-			value := values.Field(i)
-			if value.Interface() != "" {
-				keyTemp := fmt.Sprintf("%v = %v", decodeFields[field.Name], value.Interface())
-				authHeaderIMList = append(authHeaderIMList, keyTemp)
-			}
-		}
-	}
-
-	authHeaderIM := strings.Join(authHeaderIMList, ";")
-
-	authHeader := authHeaderCloud + "\\n" + authHeaderIM
-
-	//fmt.Printf(authHeader)
-
-	return authHeader
-}
-
-type confCloud struct {
+// ConfCloud ...
+type ConfCloud struct {
 	ID            string `yaml:"id"`
 	Type          string `yaml:"type"`
 	Username      string `yaml:"username"`
@@ -92,7 +46,8 @@ type confCloud struct {
 	ServiceRegion string `yaml:"service_region,omitempty"`
 }
 
-type confIM struct {
+// ConfIM ..
+type ConfIM struct {
 	ID       string `yaml:"id"`
 	Type     string `yaml:"type"`
 	Host     string `yaml:"host"`
@@ -101,14 +56,15 @@ type confIM struct {
 	Token    string `yaml:"token,omitempty"`
 }
 
-type conf struct {
-	Im    confIM    `yaml:"im"`
-	Cloud confCloud `yaml:"cloud"`
+// Conf ..
+type Conf struct {
+	Im    ConfIM    `yaml:"im"`
+	Cloud ConfCloud `yaml:"cloud"`
 }
 
-var clientConf conf
+var clientConf Conf
 
-func (c *conf) getConf(path string) *conf {
+func (c *Conf) getConf(path string) *Conf {
 
 	f, err := ioutil.ReadFile(path)
 	if err != nil {

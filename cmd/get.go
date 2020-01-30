@@ -16,11 +16,7 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"strconv"
-	"strings"
-	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -44,41 +40,25 @@ var outputCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("status called")
+		authHeader := PrepareAuthHeaders(clientConf)
 
-		client := &http.Client{
-			Timeout: 300 * time.Second,
-		}
-		fmt.Println("Submitting request to  : ", clientConf.Im.Host)
-
-		req, err := http.NewRequest("GET", string(clientConf.Im.Host)+"/"+string(args[0])+"/outputs", nil)
-
-		req.Header.Set("Content-Type", "application/json")
-
-		authHeader := PrepareAuthHeaders()
-
-		req.Header.Set("Authorization", authHeader)
-
-		var request []string
-		for name, headers := range req.Header {
-			name = strings.ToLower(name)
-			for _, h := range headers {
-				request = append(request, fmt.Sprintf("%v: %v", name, h))
-			}
+		request := Request{
+			URL:         string(clientConf.Im.Host) + "/" + string(args[0]) + "/outputs",
+			RequestType: "GET",
+			Headers: map[string]string{
+				"Authorization": authHeader,
+				"Content-Type":  "application/json",
+			},
 		}
 
-		request = append(request, fmt.Sprint("\n"))
-		//fmt.Printf(strings.Join(request, "\n"))
-
-		resp, err := client.Do(req)
+		body, statusCode, err := MakeRequest(request)
 		if err != nil {
 			panic(err)
 		}
 
-		body, _ := ioutil.ReadAll(resp.Body)
-
 		fmt.Print("Deployment output:\n")
 
-		if resp.StatusCode == 200 {
+		if statusCode == 200 {
 			fmt.Println(string(body))
 		} else {
 			fmt.Println("ERROR:\n", string(body))
@@ -96,41 +76,25 @@ var statusCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("status called")
+		authHeader := PrepareAuthHeaders(clientConf)
 
-		client := &http.Client{
-			Timeout: 300 * time.Second,
-		}
-		fmt.Println("Submitting request to  : ", clientConf.Im.Host)
-
-		req, err := http.NewRequest("GET", string(clientConf.Im.Host)+"/"+string(args[0])+"/contmsg", nil)
-
-		req.Header.Set("Content-Type", "application/json")
-
-		authHeader := PrepareAuthHeaders()
-
-		req.Header.Set("Authorization", authHeader)
-
-		var request []string
-		for name, headers := range req.Header {
-			name = strings.ToLower(name)
-			for _, h := range headers {
-				request = append(request, fmt.Sprintf("%v: %v", name, h))
-			}
+		request := Request{
+			URL:         string(clientConf.Im.Host) + "/" + string(args[0]) + "/contmsg",
+			RequestType: "GET",
+			Headers: map[string]string{
+				"Authorization": authHeader,
+				"Content-Type":  "application/json",
+			},
 		}
 
-		request = append(request, fmt.Sprint("\n"))
-		//fmt.Printf(strings.Join(request, "\n"))
-
-		resp, err := client.Do(req)
+		body, statusCode, err := MakeRequest(request)
 		if err != nil {
 			panic(err)
 		}
 
-		body, _ := ioutil.ReadAll(resp.Body)
-
 		fmt.Print("Deployment status:\n")
 
-		if resp.StatusCode == 200 {
+		if statusCode == 200 {
 			fmt.Println(string(body))
 		} else {
 			fmt.Println("ERROR:\n", string(body))
@@ -161,42 +125,25 @@ var vmstatusCmd = &cobra.Command{
 		}
 		vm := listVMs[vmID]
 
-		clientHTTP := &http.Client{
-			Timeout: 300 * time.Second,
-		}
-		fmt.Println("Submitting request to  : ", vm)
+		authHeader := PrepareAuthHeaders(clientConf)
 
-		req, err := http.NewRequest("GET", vm+"/contmsg", nil)
+		request := Request{
+			URL:         vm + "/contmsg",
+			RequestType: "GET",
+			Headers: map[string]string{
+				"Authorization": authHeader,
+				"Content-Type":  "application/json",
+			},
+		}
+
+		body, statusCode, err := MakeRequest(request)
 		if err != nil {
 			panic(err)
 		}
-
-		req.Header.Set("Content-Type", "application/json")
-
-		authHeader := PrepareAuthHeaders()
-
-		req.Header.Set("Authorization", authHeader)
-
-		var request []string
-		for name, headers := range req.Header {
-			name = strings.ToLower(name)
-			for _, h := range headers {
-				request = append(request, fmt.Sprintf("%v: %v", name, h))
-			}
-		}
-
-		request = append(request, fmt.Sprint("\n"))
-
-		resp, err := clientHTTP.Do(req)
-		if err != nil {
-			panic(err)
-		}
-
-		body, _ := ioutil.ReadAll(resp.Body)
 
 		fmt.Printf("Deployment status for vm %v:\n", vmID)
 
-		if resp.StatusCode == 200 {
+		if statusCode == 200 {
 			fmt.Println(string(body))
 		} else {
 			fmt.Println("ERROR:\n", string(body))
@@ -225,36 +172,27 @@ var vmCmd = &cobra.Command{
 			panic(err)
 		}
 		vm := listVMs[vmID]
-		clientHTTP := &http.Client{
-			Timeout: 300 * time.Second,
-		}
-		fmt.Println("Submitting request to  : ", vm)
 
-		req, err := http.NewRequest("GET", vm, nil)
-
-		req.Header.Set("Content-Type", "application/json")
-
-		authHeader := PrepareAuthHeaders()
-
-		req.Header.Set("Authorization", authHeader)
-
-		var request []string
-		for name, headers := range req.Header {
-			name = strings.ToLower(name)
-			for _, h := range headers {
-				request = append(request, fmt.Sprintf("%v: %v", name, h))
-			}
+		authHeader := PrepareAuthHeaders(clientConf)
+		request := Request{
+			URL:         vm,
+			RequestType: "GET",
+			Headers: map[string]string{
+				"Authorization": authHeader,
+				"Content-Type":  "application/json",
+			},
 		}
 
-		request = append(request, fmt.Sprint("\n"))
-
-		resp, err := clientHTTP.Do(req)
+		body, statusCode, err := MakeRequest(request)
 		if err != nil {
 			panic(err)
 		}
 
-		body, _ := ioutil.ReadAll(resp.Body)
-		fmt.Println(string(body))
+		if statusCode == 200 {
+			fmt.Println(string(body))
+		} else {
+			panic(fmt.Errorf("Server response code %d: %s", statusCode, body))
+		}
 	},
 }
 

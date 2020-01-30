@@ -15,7 +15,7 @@ var rebootCmd = &cobra.Command{
 	Use:   "reboot <infID> <vmID>",
 	Args:  cobra.MinimumNArgs(2),
 	Short: "reboot a vm in the cluster",
-	Long: ``,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("status called")
 
@@ -28,7 +28,7 @@ var rebootCmd = &cobra.Command{
 
 		req.Header.Set("Content-Type", "application/json")
 
-		authHeader := PrepareAuthHeaders()
+		authHeader := PrepareAuthHeaders(clientConf)
 
 		req.Header.Set("Authorization", authHeader)
 
