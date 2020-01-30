@@ -7,12 +7,12 @@ import (
 )
 
 // CreateInf is a wrapper for Infrastructure creation
-func CreateInf(imURL string, templateFile string, clientConf Conf) error {
+func CreateInf(imURL string, templateFile string, clientConf Conf) (infID string, err error) {
 
 	fmt.Printf("Template: %v \n", string(templateFile))
 	template, err := ioutil.ReadFile(templateFile)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	authHeader := PrepareAuthHeaders(clientConf)
@@ -29,17 +29,18 @@ func CreateInf(imURL string, templateFile string, clientConf Conf) error {
 
 	body, statusCode, err := MakeRequest(request)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if statusCode == 200 {
 		stringSplit := strings.Split(string(body), "/")
 		fmt.Println("InfrastructureID: ", stringSplit[len(stringSplit)-1])
 	} else {
-		return fmt.Errorf("Error code %d: %s", statusCode, body)
+		return "", fmt.Errorf("Error code %d: %s", statusCode, body)
 	}
 
-	return nil
+	stringSplit := strings.Split(string(body), "/")
+	return stringSplit[len(stringSplit)-1], nil
 	// TODO: create .dodas dir and save infID
 
 }

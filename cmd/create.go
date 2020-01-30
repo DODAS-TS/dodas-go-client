@@ -46,7 +46,7 @@ var createCmd = &cobra.Command{
 			if err != nil {
 				panic(err)
 			}
-			err = CreateInf(string(clientConf.Im.Host), templateFile, clientConf)
+			_, err = CreateInf(string(clientConf.Im.Host), templateFile, clientConf)
 			if err != nil {
 				panic(err)
 			}
