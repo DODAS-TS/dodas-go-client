@@ -40,29 +40,14 @@ var outputCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("status called")
-		authHeader := PrepareAuthHeaders(clientConf)
 
-		request := Request{
-			URL:         string(clientConf.Im.Host) + "/" + string(args[0]) + "/outputs",
-			RequestType: "GET",
-			Headers: map[string]string{
-				"Authorization": authHeader,
-				"Content-Type":  "application/json",
-			},
-		}
-
-		body, statusCode, err := MakeRequest(request)
+		outputs, err := GetInfOutputs(string(clientConf.Im.Host), string(args[0]), clientConf)
 		if err != nil {
 			panic(err)
 		}
 
-		fmt.Print("Deployment output:\n")
-
-		if statusCode == 200 {
-			fmt.Println(string(body))
-		} else {
-			fmt.Println("ERROR:\n", string(body))
-			return
+		for output := range outputs {
+			fmt.Println(output)
 		}
 
 	},

@@ -2,12 +2,18 @@ package cmd
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"strings"
 
 	"github.com/dciangot/toscalib"
 )
+
+// OutputsStruct ...
+type OutputsStruct struct {
+	Outputs []string `json:"outputs"`
+}
 
 // CreateInf is a wrapper for Infrastructure creation
 func CreateInf(imURL string, templateFile string, clientConf Conf) (infID string, err error) {
@@ -46,6 +52,38 @@ func CreateInf(imURL string, templateFile string, clientConf Conf) (infID string
 	return stringSplit[len(stringSplit)-1], nil
 	// TODO: create .dodas dir and save infID
 
+}
+
+// GetInfOutputs get ...
+func GetInfOutputs(imURL string, infID string, clientConf Conf) (outputs []string, err error) {
+	authHeader := PrepareAuthHeaders(clientConf)
+
+	request := Request{
+		URL:         imURL + "/" + infID + "/outputs",
+		RequestType: "Get",
+		Headers: map[string]string{
+			"Authorization": authHeader,
+			"Content-Type":  "application/json",
+		},
+	}
+
+	body, statusCode, err := MakeRequest(request)
+	if err != nil {
+		return []string{}, err
+	}
+
+	if statusCode == 200 {
+		fmt.Println("Outputs: ", string(body))
+	} else {
+		fmt.Println("ERROR:\n", string(body))
+		return []string{}, err
+	}
+
+	var bodyJSON OutputsStruct
+
+	json.Unmarshal([]byte(body), &bodyJSON)
+
+	return bodyJSON.Outputs, nil
 }
 
 // DestroyInf is a wrapper for Infrastructure creation
