@@ -12,7 +12,12 @@ import (
 
 // OutputsStruct ...
 type OutputsStruct struct {
-	Outputs []string `json:"outputs"`
+	Outputs map[string]string `json:"outputs"`
+}
+
+// StatusStruct ...
+type StatusStruct struct {
+	Status string `json:"contmsg"`
 }
 
 // CreateInf is a wrapper for Infrastructure creation
@@ -55,35 +60,70 @@ func CreateInf(imURL string, templateFile string, clientConf Conf) (infID string
 }
 
 // GetInfOutputs get ...
-func GetInfOutputs(imURL string, infID string, clientConf Conf) (outputs []string, err error) {
+func GetInfOutputs(imURL string, infID string, clientConf Conf) (outputs map[string]string, err error) {
 	authHeader := PrepareAuthHeaders(clientConf)
 
 	request := Request{
 		URL:         imURL + "/" + infID + "/outputs",
-		RequestType: "Get",
+		RequestType: "GET",
 		Headers: map[string]string{
 			"Authorization": authHeader,
-			"Content-Type":  "application/json",
+			"Accept":        "application/json",
 		},
 	}
 
 	body, statusCode, err := MakeRequest(request)
 	if err != nil {
-		return []string{}, err
+		return map[string]string{}, err
 	}
 
-	if statusCode == 200 {
-		fmt.Println("Outputs: ", string(body))
-	} else {
+	if statusCode != 200 {
 		fmt.Println("ERROR:\n", string(body))
-		return []string{}, err
+		return map[string]string{}, err
 	}
 
 	var bodyJSON OutputsStruct
 
-	json.Unmarshal([]byte(body), &bodyJSON)
+	err = json.Unmarshal(body, &bodyJSON)
+	if err != nil {
+		return map[string]string{}, err
+	}
 
 	return bodyJSON.Outputs, nil
+}
+
+// GetInfVMStates get ...
+func GetInfVMStates(imURL string, infID string, vm string, clientConf Conf) (status string, err error) {
+	authHeader := PrepareAuthHeaders(clientConf)
+
+	request := Request{
+		URL:         imURL + "/" + infID + "/vms/" + vm + "/contmsg",
+		RequestType: "GET",
+		Headers: map[string]string{
+			"Authorization": authHeader,
+			"Accept":        "application/json",
+		},
+	}
+
+	body, statusCode, err := MakeRequest(request)
+	if err != nil {
+		return "", err
+	}
+
+	if statusCode != 200 {
+		fmt.Println("ERROR:\n", string(body))
+		return "", err
+	}
+
+	var bodyJSON StatusStruct
+
+	//fmt.Println(string(body))
+	err = json.Unmarshal(body, &bodyJSON)
+	if err != nil {
+		return "", err
+	}
+
+	return bodyJSON.Status, nil
 }
 
 // DestroyInf is a wrapper for Infrastructure creation
@@ -131,6 +171,7 @@ func UpdateInf(imURL string, infID string, templateFile string, clientConf Conf)
 		Headers: map[string]string{
 			"Authorization": authHeader,
 			"Content-Type":  "text/yaml",
+			"Accept":        "application/json",
 		},
 		Content: []byte(template),
 	}
@@ -141,8 +182,7 @@ func UpdateInf(imURL string, infID string, templateFile string, clientConf Conf)
 	}
 
 	if statusCode == 200 {
-		stringSplit := strings.Split(string(body), "/")
-		fmt.Println("InfrastructureID: ", stringSplit[len(stringSplit)-1])
+		fmt.Println(string(body))
 	} else {
 		return fmt.Errorf("Error code %d: %s", statusCode, body)
 	}

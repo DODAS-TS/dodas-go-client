@@ -15,11 +15,16 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
+
+var debug bool
 
 // getCmd represents the get command
 var getCmd = &cobra.Command{
@@ -46,8 +51,8 @@ var outputCmd = &cobra.Command{
 			panic(err)
 		}
 
-		for output := range outputs {
-			fmt.Println(output)
+		for key, value := range outputs {
+			fmt.Println(key, value)
 		}
 
 	},
@@ -98,41 +103,31 @@ var vmstatusCmd = &cobra.Command{
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("vmstatus called")
-		listVMs, err := GetVMs(string(args[0]))
+
+		status, err := GetInfVMStates(string(clientConf.Im.Host), string(args[0]), string(args[1]), clientConf)
 		if err != nil {
 			panic(err)
 		}
 
-		vmN := string(args[1])
-		vmID, err := strconv.Atoi(vmN)
-		if err != nil {
-			panic(err)
-		}
-		vm := listVMs[vmID]
+		if debug {
+			scanner := bufio.NewScanner(strings.NewReader(status))
 
-		authHeader := PrepareAuthHeaders(clientConf)
+			reExclude := regexp.MustCompile(`contmsg`)
+			reFinished := regexp.MustCompile(`^Task.*finished`)
+			reStarted := regexp.MustCompile(`^Launch task:`)
 
-		request := Request{
-			URL:         vm + "/contmsg",
-			RequestType: "GET",
-			Headers: map[string]string{
-				"Authorization": authHeader,
-				"Content-Type":  "application/json",
-			},
-		}
+			var line string
 
-		body, statusCode, err := MakeRequest(request)
-		if err != nil {
-			panic(err)
-		}
+			for scanner.Scan() {
 
-		fmt.Printf("Deployment status for vm %v:\n", vmID)
+				line = scanner.Text()
 
-		if statusCode == 200 {
-			fmt.Println(string(body))
+				if (reFinished.Match([]byte(line)) || reStarted.Match([]byte(line))) && !reExclude.Match([]byte(line)) {
+					fmt.Println(line)
+				}
+			}
 		} else {
-			fmt.Println("ERROR:\n", string(body))
-			return
+			fmt.Println(status)
 		}
 
 	},
@@ -197,5 +192,6 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
+	vmstatusCmd.Flags().BoolVarP(&debug, "debug", "d", false, "Enable verbose status logging")
 	// getCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
