@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/url"
 	"strings"
 
@@ -260,13 +259,7 @@ func (clientConf Conf) GetRefreshToken(rr RefreshRequest) (RefreshToken string, 
 }
 
 // UpdateInf ..
-func (clientConf Conf) UpdateInf(imURL string, infID string, templateFile string) error {
-
-	fmt.Printf("Template: %v \n", string(templateFile))
-	template, err := ioutil.ReadFile(templateFile)
-	if err != nil {
-		return err
-	}
+func (clientConf Conf) UpdateInf(imURL string, infID string, template []byte) error {
 
 	authHeader := PrepareAuthHeaders(clientConf)
 
@@ -298,15 +291,11 @@ func (clientConf Conf) UpdateInf(imURL string, infID string, templateFile string
 }
 
 // Validate TOSCA template
-func (clientConf Conf) Validate(templateFile string) error {
+func (clientConf Conf) Validate(template []byte) error {
 	fmt.Println("validate called")
 	var t toscalib.ServiceTemplateDefinition
-	template, err := ioutil.ReadFile(templateFile)
-	if err != nil {
-		return err
-	}
 
-	err = t.Parse(bytes.NewBuffer(template))
+	err := t.Parse(bytes.NewBuffer(template))
 	if err != nil {
 		fmt.Printf("ERROR: Invalid template for %v", err)
 		return err

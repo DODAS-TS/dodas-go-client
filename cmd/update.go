@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 
 	"github.com/spf13/cobra"
 )
@@ -14,13 +15,20 @@ var updateCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("update called")
-		err := clientConf.Validate(args[1])
+
+		fmt.Printf("Template: %v \n", string(args[1]))
+		template, err := ioutil.ReadFile(args[1])
+		if err != nil {
+			panic(err)
+		}
+
+		err = clientConf.Validate(template)
 		if err != nil {
 			panic(err)
 		}
 
 		fmt.Printf("Updating infID %s with: %s \n", args[0], args[1])
-		err = clientConf.UpdateInf(string(clientConf.Im.Host), args[0], args[1])
+		err = clientConf.UpdateInf(string(clientConf.Im.Host), args[0], template)
 		if err != nil {
 			panic(err)
 		}

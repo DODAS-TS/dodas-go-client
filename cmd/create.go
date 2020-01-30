@@ -45,13 +45,13 @@ var createCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, temp := range args {
 			templateFile = temp
-			err := clientConf.Validate(templateFile)
+			fmt.Printf("Template: %v \n", string(templateFile))
+			template, err := ioutil.ReadFile(templateFile)
 			if err != nil {
 				panic(err)
 			}
 
-			fmt.Printf("Template: %v \n", string(templateFile))
-			template, err := ioutil.ReadFile(templateFile)
+			err = clientConf.Validate(template)
 			if err != nil {
 				panic(err)
 			}

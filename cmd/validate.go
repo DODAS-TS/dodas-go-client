@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 
 	"github.com/spf13/cobra"
 )
@@ -28,12 +29,22 @@ var validateCmd = &cobra.Command{
 dodas validate --template my_tosca_template.yml`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if args[0] == "" {
-			err := clientConf.Validate(templateFile)
+			fmt.Printf("Template: %v \n", string(templateFile))
+			template, err := ioutil.ReadFile(templateFile)
+			if err != nil {
+				panic(err)
+			}
+			err = clientConf.Validate(template)
 			if err != nil {
 				fmt.Println(err)
 			}
 		} else {
-			err := clientConf.Validate(args[0])
+			fmt.Printf("Template: %v \n", string(args[0]))
+			template, err := ioutil.ReadFile(args[0])
+			if err != nil {
+				panic(err)
+			}
+			err = clientConf.Validate(template)
 			if err != nil {
 				fmt.Println(err)
 			}
