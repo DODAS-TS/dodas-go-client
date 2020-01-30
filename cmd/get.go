@@ -46,7 +46,7 @@ var outputCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("status called")
 
-		outputs, err := GetInfOutputs(string(clientConf.Im.Host), string(args[0]), clientConf)
+		outputs, err := clientConf.GetInfOutputs(string(clientConf.Im.Host), string(args[0]))
 		if err != nil {
 			panic(err)
 		}
@@ -104,7 +104,7 @@ var vmstatusCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("vmstatus called")
 
-		status, err := GetInfVMStates(string(clientConf.Im.Host), string(args[0]), string(args[1]), clientConf)
+		status, err := clientConf.GetInfVMStates(string(clientConf.Im.Host), string(args[0]), string(args[1]))
 		if err != nil {
 			panic(err)
 		}

@@ -28,12 +28,12 @@ var validateCmd = &cobra.Command{
 dodas validate --template my_tosca_template.yml`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if args[0] == "" {
-			err := Validate(templateFile)
+			err := clientConf.Validate(templateFile)
 			if err != nil {
 				fmt.Println(err)
 			}
 		} else {
-			err := Validate(args[0])
+			err := clientConf.Validate(args[0])
 			if err != nil {
 				fmt.Println(err)
 			}

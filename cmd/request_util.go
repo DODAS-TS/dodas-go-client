@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"bytes"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"time"
@@ -150,7 +150,7 @@ func MakeRequest(request Request) (body []byte, statusCode int, err error) {
 
 	switch r.RequestType {
 	case "POST":
-		req, err = http.NewRequest(r.RequestType, r.URL, bytes.NewBuffer(r.Content))
+		req, err = http.NewRequest(r.RequestType, r.URL, strings.NewReader(string(r.Content)))
 		if err != nil {
 			return nil, -1, fmt.Errorf("Failed to create POST http request: %s", err)
 		}
@@ -161,9 +161,15 @@ func MakeRequest(request Request) (body []byte, statusCode int, err error) {
 		}
 	}
 
+	if request.AuthUser != "" && request.AuthPwd != "" {
+		req.SetBasicAuth(url.QueryEscape(request.AuthUser), url.QueryEscape(request.AuthPwd))
+	}
+
 	for key, value := range r.Headers {
 		req.Header.Set(key, value)
 	}
+
+	fmt.Println(req.Header.Get("grant_type"))
 
 	resp, err := client.Do(req)
 	if err != nil {

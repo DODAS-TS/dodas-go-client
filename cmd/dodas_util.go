@@ -5,10 +5,27 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net/url"
 	"strings"
 
 	"github.com/dciangot/toscalib"
 )
+
+// RefreshRequest ..
+type RefreshRequest struct {
+	Endpoint     string
+	Audience     string
+	ClientID     string
+	ClientSecret string
+	RefreshToken string
+	AccessToken  string
+}
+
+// RefreshTokenStruct ..
+type RefreshTokenStruct struct {
+	RefreshToken string `json:"refresh_token"`
+	AccessToken  string `json:"access_token"`
+}
 
 // OutputsStruct ...
 type OutputsStruct struct {
@@ -21,7 +38,7 @@ type StatusStruct struct {
 }
 
 // CreateInf is a wrapper for Infrastructure creation
-func CreateInf(imURL string, templateFile string, clientConf Conf) (infID string, err error) {
+func (clientConf Conf) CreateInf(imURL string, templateFile string) (infID string, err error) {
 
 	fmt.Printf("Template: %v \n", string(templateFile))
 	template, err := ioutil.ReadFile(templateFile)
@@ -59,8 +76,36 @@ func CreateInf(imURL string, templateFile string, clientConf Conf) (infID string
 
 }
 
+// DestroyInf is a wrapper for Infrastructure creation
+func (clientConf Conf) DestroyInf(imURL string, infID string) error {
+	authHeader := PrepareAuthHeaders(clientConf)
+
+	request := Request{
+		URL:         imURL + "/" + infID,
+		RequestType: "DELETE",
+		Headers: map[string]string{
+			"Authorization": authHeader,
+			"Content-Type":  "text/yaml",
+		},
+	}
+
+	body, statusCode, err := MakeRequest(request)
+	if err != nil {
+		return err
+	}
+
+	if statusCode == 200 {
+		fmt.Println("Removed infrastracture ID: ", infID)
+	} else {
+		fmt.Println("ERROR:\n", string(body))
+		return err
+	}
+
+	return nil
+}
+
 // GetInfOutputs get ...
-func GetInfOutputs(imURL string, infID string, clientConf Conf) (outputs map[string]string, err error) {
+func (clientConf Conf) GetInfOutputs(imURL string, infID string) (outputs map[string]string, err error) {
 	authHeader := PrepareAuthHeaders(clientConf)
 
 	request := Request{
@@ -93,7 +138,7 @@ func GetInfOutputs(imURL string, infID string, clientConf Conf) (outputs map[str
 }
 
 // GetInfVMStates get ...
-func GetInfVMStates(imURL string, infID string, vm string, clientConf Conf) (status string, err error) {
+func (clientConf Conf) GetInfVMStates(imURL string, infID string, vm string) (status string, err error) {
 	authHeader := PrepareAuthHeaders(clientConf)
 
 	request := Request{
@@ -126,36 +171,102 @@ func GetInfVMStates(imURL string, infID string, vm string, clientConf Conf) (sta
 	return bodyJSON.Status, nil
 }
 
-// DestroyInf is a wrapper for Infrastructure creation
-func DestroyInf(imURL string, infID string, clientConf Conf) error {
-	authHeader := PrepareAuthHeaders(clientConf)
+// GetAccessToken ..
+func (clientConf Conf) GetAccessToken(rr RefreshRequest) (token string, err error) {
+
+	clientID := rr.ClientID
+	clientSecret := rr.ClientSecret
+	IAMTokenEndpoint := rr.Endpoint
+	refreshToken := rr.RefreshToken
+
+	v := url.Values{}
+
+	v.Set("client_id", clientID)
+	v.Set("client_secret", clientSecret)
+	v.Set("grant_type", "refresh_token")
+	v.Set("refresh_token", refreshToken)
 
 	request := Request{
-		URL:         imURL + "/" + infID,
-		RequestType: "DELETE",
+		URL:         IAMTokenEndpoint,
+		RequestType: "POST",
 		Headers: map[string]string{
-			"Authorization": authHeader,
-			"Content-Type":  "text/yaml",
+			"Content-Type": "application/x-www-form-urlencoded",
 		},
+		AuthUser: clientID,
+		AuthPwd:  clientSecret,
+		Content:  []byte(v.Encode()),
 	}
 
 	body, statusCode, err := MakeRequest(request)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	if statusCode == 200 {
-		fmt.Println("Removed infrastracture ID: ", infID)
-	} else {
+	if statusCode != 200 {
 		fmt.Println("ERROR:\n", string(body))
-		return err
+		return "", err
 	}
 
-	return nil
+	var bodyJSON RefreshTokenStruct
+
+	//fmt.Println(string(body))
+	err = json.Unmarshal(body, &bodyJSON)
+	if err != nil {
+		return "", err
+	}
+
+	return bodyJSON.AccessToken, nil
+}
+
+// GetRefreshToken ..
+func (clientConf Conf) GetRefreshToken(rr RefreshRequest) (RefreshToken string, err error) {
+
+	clientID := rr.ClientID
+	clientSecret := rr.ClientSecret
+	IAMTokenEndpoint := rr.Endpoint
+	accessToken := rr.AccessToken
+
+	v := url.Values{}
+
+	v.Set("client_id", clientID)
+	v.Set("client_secret", clientSecret)
+	v.Set("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange")
+	v.Set("subject_token", accessToken)
+
+	request := Request{
+		URL:         IAMTokenEndpoint,
+		RequestType: "POST",
+		Headers: map[string]string{
+			"Content-Type": "application/x-www-form-urlencoded",
+		},
+		AuthUser: clientID,
+		AuthPwd:  clientSecret,
+		Content:  []byte(v.Encode()),
+	}
+
+	body, statusCode, err := MakeRequest(request)
+	if err != nil {
+		return "", err
+	}
+
+	if statusCode != 200 {
+		fmt.Printf("Error code %d: %s\n", statusCode, string(body))
+		return "", err
+	}
+
+	var bodyJSON RefreshTokenStruct
+
+	//fmt.Println(string(body))
+	err = json.Unmarshal(body, &bodyJSON)
+	if err != nil {
+		return "", err
+	}
+
+	return bodyJSON.RefreshToken, nil
 }
 
 // UpdateInf ..
-func UpdateInf(imURL string, infID string, templateFile string, clientConf Conf) error {
+func (clientConf Conf) UpdateInf(imURL string, infID string, templateFile string) error {
 
 	fmt.Printf("Template: %v \n", string(templateFile))
 	template, err := ioutil.ReadFile(templateFile)
@@ -193,7 +304,7 @@ func UpdateInf(imURL string, infID string, templateFile string, clientConf Conf)
 }
 
 // Validate TOSCA template
-func Validate(templateFile string) error {
+func (clientConf Conf) Validate(templateFile string) error {
 	fmt.Println("validate called")
 	var t toscalib.ServiceTemplateDefinition
 	template, err := ioutil.ReadFile(templateFile)

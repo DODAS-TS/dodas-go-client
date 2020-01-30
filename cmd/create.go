@@ -42,11 +42,11 @@ var createCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, temp := range args {
 			templateFile = temp
-			err := Validate(templateFile)
+			err := clientConf.Validate(templateFile)
 			if err != nil {
 				panic(err)
 			}
-			_, err = CreateInf(string(clientConf.Im.Host), templateFile, clientConf)
+			_, err = clientConf.CreateInf(string(clientConf.Im.Host), templateFile)
 			if err != nil {
 				panic(err)
 			}

@@ -14,13 +14,13 @@ var updateCmd = &cobra.Command{
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("update called")
-		err := Validate(args[1])
+		err := clientConf.Validate(args[1])
 		if err != nil {
 			panic(err)
 		}
 
 		fmt.Printf("Updating infID %s with: %s \n", args[0], args[1])
-		err = UpdateInf(string(clientConf.Im.Host), args[0], args[1], clientConf)
+		err = clientConf.UpdateInf(string(clientConf.Im.Host), args[0], args[1])
 		if err != nil {
 			panic(err)
 		}
