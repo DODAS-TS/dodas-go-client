@@ -2,8 +2,6 @@
 
 [![Build Status](https://travis-ci.org/DODAS-TS/dodas-go-client.svg?branch=master)](https://travis-ci.org/DODAS-TS/dodas-go-client)
 
-[Reference Manual](https://dodas-ts.github.io/dodas-go-client/dodas)
-
 ## Installation and usage
 
 Download the binary from the latest release on [github](https://github.com/DODAS-TS/dodas-go-client/releases). For instance:
@@ -54,11 +52,15 @@ dodas login <infID> <vmID>
 
 ## Quick start
 
-Your deployments will be created and managed by the [InfrastructureManager]()(IM).
-To start playing with the operatori we provide a quick start guide with two options:
+Your deployments will be created and managed by the [InfrastructureManager](https://www.grycap.upv.es/im/index.php)(IM).
+To start playing with DODAS please refer to this two quick start guides on the official site:
 
-- using the **[community instance of IM](https://dodas-ts.github.io/dodas-go-client/quick-start/community/)** (required free registration for evaluation purpose [here]())
-- a **[standalone setup](https://dodas-ts.github.io/dodas-operator/quick-start/standalone/)** where IM will be deployed in a docker container and used with the client
+- using the **[community instance of IM](https://dodas-ts.github.io/dodas-templates/quick-start-community/)** (required free registration for evaluation purpose [here](https://dodas-iam.cloud.cnaf.infn.it))
+- a **[standalone setup](https://dodas-ts.github.io/dodas-templates/quick-start/)** where IM will be deployed in a docker container and used with the client
+
+> **N.B** All of the pre-compiled templates provided by DODAS use the helm charts defined and documented [here](https://github.com/DODAS-TS/helm_charts/tree/master/stable).
+>
+> Therefore **all the available applications can be installed as they are on top of any k8s instance with [Helm](https://helm.sh/)**
 
 ## Building from source
 
@@ -90,3 +92,10 @@ If you want to contribute:
 3. create a pull request
 
 Thanks!
+
+## Contact us
+
+DODAS Team provides two support channels, email and Slack channel.
+
+- **mailing list**: send a message to the following list dodas-support@lists.infn.it
+- **slack channel**: join us on [Slack Channel](https://dodas-infn.slack.com/archives/CAJ6VG71A)
