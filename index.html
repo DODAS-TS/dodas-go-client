@@ -249,15 +249,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    Quick start
+  <a href="#installation-and-usage" class="md-nav__link">
+    Installation and usage
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#using-docker-image" class="md-nav__link">
-    Using docker image
+  <a href="#quick-start" class="md-nav__link">
+    Quick start
   </a>
   
 </li>
@@ -608,15 +608,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
-    Quick start
+  <a href="#installation-and-usage" class="md-nav__link">
+    Installation and usage
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#using-docker-image" class="md-nav__link">
-    Using docker image
+  <a href="#quick-start" class="md-nav__link">
+    Quick start
   </a>
   
 </li>
@@ -657,13 +657,14 @@
                 <h1 id="dodas-client">DODAS client</h1>
 <p><a href="https://travis-ci.org/DODAS-TS/dodas-go-client"><img alt="Build Status" src="https://travis-ci.org/DODAS-TS/dodas-go-client.svg?branch=master" /></a></p>
 <p><a href="https://dodas-ts.github.io/dodas-go-client/dodas">Reference Manual</a></p>
-<h2 id="quick-start">Quick start</h2>
+<h2 id="installation-and-usage">Installation and usage</h2>
 <p>Download the binary from the latest release on <a href="https://github.com/DODAS-TS/dodas-go-client/releases">github</a>. For instance:</p>
 <pre><code class="bash">wget https://github.com/DODAS-TS/dodas-go-client/releases/download/v0.3.3/dodas.zip
 unzip dodas.zip
 cp dodas /usr/local/bin
 </code></pre>
 
+<p>In alternative you can also run the dodas command inside the client container <code>dodasts/dodas-client:v0.3.3</code>.</p>
 <blockquote>
 <p><strong>CLI autocomplete</strong></p>
 <p>Autocompletion for bash and zsh is supported</p>
@@ -693,17 +694,13 @@ cp dodas /usr/local/bin
 # e.g. dodas login cb585e5c-33b6-11ea-8776-0242ac150003 0
 </code></pre>
 
-<h2 id="using-docker-image">Using docker image</h2>
-<p>In alternative you can create a docker image with the compiled client inside with:</p>
-<pre><code class="bash">make docker-img-build
-</code></pre>
-
-<p>and then you can bind the configuration files and run the previous commands as:</p>
-<pre><code class="bash">
-# list the Infrastructure ID of all your deployments
-docker run -v $HOME/.dodas.yaml:/app/.dodas.yaml --rm dodas list infIDs
-</code></pre>
-
+<h2 id="quick-start">Quick start</h2>
+<p>Your deployments will be created and managed by the <a href="">InfrastructureManager</a>(IM).
+To start playing with the operatori we provide a quick start guide with two options:</p>
+<ul>
+<li>using the <strong><a href="https://dodas-ts.github.io/dodas-go-client/quick-start/community/">community instance of IM</a></strong> (required free registration for evaluation purpose <a href="">here</a>)</li>
+<li>a <strong><a href="https://dodas-ts.github.io/dodas-operator/quick-start/standalone/">standalone setup</a></strong> where IM will be deployed in a docker container and used with the client</li>
+</ul>
 <h2 id="building-from-source">Building from source</h2>
 <p>To compile on a linux machine (go version that supports <code>go modules</code> is required for building from source: e.g. &gt;= v1.12):</p>
 <pre><code class="bash">make build
