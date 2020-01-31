@@ -1,11 +1,10 @@
-
 # DODAS client
 
 [![Build Status](https://travis-ci.org/DODAS-TS/dodas-go-client.svg?branch=master)](https://travis-ci.org/DODAS-TS/dodas-go-client)
 
 [Reference Manual](https://dodas-ts.github.io/dodas-go-client/dodas)
 
-## Quick start
+## Installation and usage
 
 Download the binary from the latest release on [github](https://github.com/DODAS-TS/dodas-go-client/releases). For instance:
 
@@ -14,6 +13,8 @@ wget https://github.com/DODAS-TS/dodas-go-client/releases/download/v0.3.3/dodas.
 unzip dodas.zip
 cp dodas /usr/local/bin
 ```
+
+In alternative you can also run the dodas command inside the client container `dodasts/dodas-client:v0.3.3`.
 
 > **CLI autocomplete**
 >
@@ -51,21 +52,13 @@ dodas login <infID> <vmID>
 # e.g. dodas login cb585e5c-33b6-11ea-8776-0242ac150003 0
 ```
 
-## Using docker image
+## Quick start
 
-In alternative you can create a docker image with the compiled client inside with:
+Your deployments will be created and managed by the [InfrastructureManager]()(IM).
+To start playing with the operatori we provide a quick start guide with two options:
 
-```bash
-make docker-img-build
-```
-
-and then you can bind the configuration files and run the previous commands as:
-
-```bash
-
-# list the Infrastructure ID of all your deployments
-docker run -v $HOME/.dodas.yaml:/app/.dodas.yaml --rm dodas list infIDs
-```
+- using the **[community instance of IM](https://dodas-ts.github.io/dodas-go-client/quick-start/community/)** (required free registration for evaluation purpose [here]())
+- a **[standalone setup](https://dodas-ts.github.io/dodas-operator/quick-start/standalone/)** where IM will be deployed in a docker container and used with the client
 
 ## Building from source
 

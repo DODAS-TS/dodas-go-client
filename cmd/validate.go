@@ -28,7 +28,7 @@ var validateCmd = &cobra.Command{
 	Long: `Example:
 dodas validate --template my_tosca_template.yml`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if args[0] == "" {
+		if len(args) == 0 {
 			fmt.Printf("Template: %v \n", string(templateFile))
 			template, err := ioutil.ReadFile(templateFile)
 			if err != nil {
