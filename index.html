@@ -276,6 +276,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#contact-us" class="md-nav__link">
+    Contact us
+  </a>
+  
+</li>
+      
       
       
       
@@ -635,6 +642,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#contact-us" class="md-nav__link">
+    Contact us
+  </a>
+  
+</li>
+      
       
       
       
@@ -695,12 +709,16 @@ cp dodas /usr/local/bin
 </code></pre>
 
 <h2 id="quick-start">Quick start</h2>
-<p>Your deployments will be created and managed by the <a href="">InfrastructureManager</a>(IM).
-To start playing with the operatori we provide a quick start guide with two options:</p>
+<p>Your deployments will be created and managed by the <a href="https://www.grycap.upv.es/im/index.php">InfrastructureManager</a>(IM).
+To start playing with DODAS please refer to this two quick start guides on the official site:</p>
 <ul>
-<li>using the <strong><a href="https://dodas-ts.github.io/dodas-go-client/quick-start/community/">community instance of IM</a></strong> (required free registration for evaluation purpose <a href="">here</a>)</li>
-<li>a <strong><a href="https://dodas-ts.github.io/dodas-operator/quick-start/standalone/">standalone setup</a></strong> where IM will be deployed in a docker container and used with the client</li>
+<li>using the <strong><a href="https://dodas-ts.github.io/dodas-templates/quick-start-community/">community instance of IM</a></strong> (required free registration for evaluation purpose <a href="https://dodas-iam.cloud.cnaf.infn.it">here</a>)</li>
+<li>a <strong><a href="https://dodas-ts.github.io/dodas-templates/quick-start/">standalone setup</a></strong> where IM will be deployed in a docker container and used with the client</li>
 </ul>
+<blockquote>
+<p><strong>N.B</strong> All of the pre-compiled templates provided by DODAS use the helm charts defined and documented <a href="https://github.com/DODAS-TS/helm_charts/tree/master/stable">here</a>.</p>
+<p>Therefore <strong>all the available applications can be installed as they are on top of any k8s instance with <a href="https://helm.sh/">Helm</a></strong></p>
+</blockquote>
 <h2 id="building-from-source">Building from source</h2>
 <p>To compile on a linux machine (go version that supports <code>go modules</code> is required for building from source: e.g. &gt;= v1.12):</p>
 <pre><code class="bash">make build
@@ -723,6 +741,12 @@ make macos-build
 <li>create a pull request</li>
 </ol>
 <p>Thanks!</p>
+<h2 id="contact-us">Contact us</h2>
+<p>DODAS Team provides two support channels, email and Slack channel.</p>
+<ul>
+<li><strong>mailing list</strong>: send a message to the following list dodas-support@lists.infn.it</li>
+<li><strong>slack channel</strong>: join us on <a href="https://dodas-infn.slack.com/archives/CAJ6VG71A">Slack Channel</a></li>
+</ul>
                 
                   
                 
