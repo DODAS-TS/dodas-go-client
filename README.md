@@ -54,11 +54,11 @@ dodas login <infID> <vmID>
 
 ## Quick start
 
-Your deployments will be created and managed by the [InfrastructureManager]()(IM).
+Your deployments will be created and managed by the [InfrastructureManager](https://www.grycap.upv.es/im/index.php)(IM).
 To start playing with the operatori we provide a quick start guide with two options:
 
-- using the **[community instance of IM](https://dodas-ts.github.io/dodas-go-client/quick-start/community/)** (required free registration for evaluation purpose [here]())
-- a **[standalone setup](https://dodas-ts.github.io/dodas-operator/quick-start/standalone/)** where IM will be deployed in a docker container and used with the client
+- using the **[community instance of IM](https://dodas-ts.github.io/dodas-go-client/quick-start/community/)** (required free registration for evaluation purpose [here](https://dodas-iam.cloud.cnaf.infn.it))
+- a **[standalone setup](https://dodas-ts.github.io/dodas-go-client/quick-start/standalone/)** where IM will be deployed in a docker container and used with the client
 
 ## Building from source
 

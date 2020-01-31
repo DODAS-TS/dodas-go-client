@@ -1,5 +1,7 @@
 # Standalone installation
 
+**UNDER CONSTRUCTION**
+
 ## Requirements
 
 ## Configuration
