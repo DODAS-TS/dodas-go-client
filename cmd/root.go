@@ -56,10 +56,19 @@ type ConfIM struct {
 	Token    string `yaml:"token,omitempty"`
 }
 
+// TokenRefreshConf ..
+type TokenRefreshConf struct {
+	ClientID         string `yaml:"client_id"`
+	ClientSecret     string `yaml:"client_secret"`
+	IAMTokenEndpoint string `yaml:"iam_endpoint"`
+	DumpFile         string `yaml:"dump_file"`
+}
+
 // Conf ..
 type Conf struct {
-	Im    ConfIM    `yaml:"im"`
-	Cloud ConfCloud `yaml:"cloud"`
+	Im           ConfIM           `yaml:"im"`
+	Cloud        ConfCloud        `yaml:"cloud"`
+	AllowRefresh TokenRefreshConf `yaml:"allowrefresh,omitempty"`
 }
 
 var clientConf Conf

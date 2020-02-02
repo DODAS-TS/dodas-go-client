@@ -25,9 +25,10 @@ func validateRequest(r Request) (Request, error) {
 
 	validatedRequest := r
 
-	if &r.Timeout == nil {
-		validatedRequest.Timeout = 5 * time.Minute
-	}
+	// TODO: implemente timeout from config
+	//if &r.Timeout == nil {
+	validatedRequest.Timeout = 5 * time.Minute
+	//}
 
 	if r.URL == "" {
 		return Request{}, fmt.Errorf("URL not specified")

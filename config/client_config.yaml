@@ -2,7 +2,7 @@ cloud:
     id: os
     type: OpenStack
     host: my_cloud_endpoint
-    # e.g. host: http://openstack.fisica.unipg.it:5000/ 
+    # e.g. host: http://openstack.fisica.unipg.it:5000/
     username: my_username
     password: < PUT HERE YOUR OpenStack Password >
     tenant: my_os_tenant
@@ -11,6 +11,10 @@ cloud:
 im:
     id: im
     type: InfrastructureManager
-    host: https://im-dodas.cloud.cnaf.infn.it/infrastructures 
-    token: < PUT HERE YOUR IAM TOKEN > 
-
+    host: https://im-dodas.cloud.cnaf.infn.it/infrastructures
+    token: < PUT HERE YOUR IAM TOKEN >
+allowrefresh:
+    client_id: < YOUR EXCHANGE TOKEN CLIENT ID >
+    client_secret: < YOUR EXCHANGE TOKEN CLIENT SECRET >
+    iam_endpoint: https://dodas-iam.cloud.cnaf.infn.it/token
+    dump_file: /tmp/.refresh_token

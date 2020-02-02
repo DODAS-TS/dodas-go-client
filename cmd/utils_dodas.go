@@ -165,12 +165,11 @@ func (clientConf Conf) GetInfVMStates(imURL string, infID string, vm string) (st
 }
 
 // GetAccessToken ..
-func (clientConf Conf) GetAccessToken(rr RefreshRequest) (token string, err error) {
+func (clientConf Conf) GetAccessToken(refreshToken string) (token string, err error) {
 
-	clientID := rr.ClientID
-	clientSecret := rr.ClientSecret
-	IAMTokenEndpoint := rr.Endpoint
-	refreshToken := rr.RefreshToken
+	clientID := clientConf.AllowRefresh.ClientID
+	clientSecret := clientConf.AllowRefresh.ClientSecret
+	IAMTokenEndpoint := clientConf.AllowRefresh.IAMTokenEndpoint
 
 	v := url.Values{}
 
@@ -212,12 +211,12 @@ func (clientConf Conf) GetAccessToken(rr RefreshRequest) (token string, err erro
 }
 
 // GetRefreshToken ..
-func (clientConf Conf) GetRefreshToken(rr RefreshRequest) (RefreshToken string, err error) {
+func (clientConf Conf) GetRefreshToken() (RefreshToken string, err error) {
 
-	clientID := rr.ClientID
-	clientSecret := rr.ClientSecret
-	IAMTokenEndpoint := rr.Endpoint
-	accessToken := rr.AccessToken
+	clientID := clientConf.AllowRefresh.ClientID
+	clientSecret := clientConf.AllowRefresh.ClientSecret
+	IAMTokenEndpoint := clientConf.AllowRefresh.IAMTokenEndpoint
+	accessToken := clientConf.Im.Token
 
 	v := url.Values{}
 
