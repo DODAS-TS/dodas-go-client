@@ -107,7 +107,8 @@ func (c *Conf) getConf(path string) *Conf {
 
 		_, err = clientConf.ListInfIDs()
 		if err != nil {
-			re := regexp.MustCompile(`^.*OIDC auth Token expired`)
+
+			re := regexp.MustCompile(`^.*OIDC auth Token expired.*`)
 			if re.Match([]byte(err.Error())) {
 
 				fmt.Printf("Token expired, trying to refresh the token ")

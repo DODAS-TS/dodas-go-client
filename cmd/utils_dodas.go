@@ -97,7 +97,7 @@ func (clientConf Conf) DestroyInf(infID string) error {
 		fmt.Println("Removed infrastracture ID: ", infID)
 	} else {
 		fmt.Println("ERROR:\n", string(body))
-		return err
+		return fmt.Errorf("Error code %d: %s", statusCode, body)
 	}
 
 	return nil
@@ -123,7 +123,7 @@ func (clientConf Conf) GetInfOutputs(infID string) (outputs map[string]string, e
 
 	if statusCode != 200 {
 		fmt.Println("ERROR:\n", string(body))
-		return map[string]string{}, err
+		return map[string]string{}, fmt.Errorf("Error code %d: %s", statusCode, body)
 	}
 
 	var bodyJSON OutputsStruct
@@ -156,7 +156,7 @@ func (clientConf Conf) GetInfVMStates(infID string, vm string) (status string, e
 
 	if statusCode != 200 {
 		fmt.Println("ERROR:\n", string(body))
-		return "", err
+		return "", fmt.Errorf("Error code %d: %s", statusCode, body)
 	}
 
 	var bodyJSON StatusStruct
@@ -189,8 +189,7 @@ func (clientConf Conf) ListInfIDs() (infIDs []map[string]string, err error) {
 	}
 
 	if statusCode != 200 {
-		fmt.Println("ERROR:\n", string(body))
-		return []map[string]string{}, err
+		return []map[string]string{}, fmt.Errorf("Error code %d: %s", statusCode, body)
 	}
 
 	var bodyJSON ListIDStruct
