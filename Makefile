@@ -4,8 +4,8 @@ BUILD_DATE := `date +%Y-%m-%d\ %H:%M`
 VERSIONFILE := version.go
 
 GOCMD=go
-GOBUILD=$(GOCMD) build -x -ldflags "-w -v"
-GOBUILD_DBG=$(GOCMD) build -x
+GOBUILD=$(GOCMD) build -mod=vendor -installsuffix cgo -a -x -ldflags "-w -v"
+GOBUILD_DBG=$(GOCMD) build -x -mod=vendor
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
@@ -19,10 +19,10 @@ export GOARCH=amd64
 all: build test
 
 build:
-	$(GOBUILD) -o $(BINARY_NAME)
+	env $(GOBUILD) -o $(BINARY_NAME)
 
 build-debug:
-	$(GOBUILD_DBG) -o $(BINARY_NAME) -v
+	env CGO_ENABLED=0 $(GOBUILD_DBG) -o $(BINARY_NAME) -v
 
 doc:
 	cp README.md docs/README.md
@@ -57,10 +57,10 @@ docker-img-build:
 	docker build . -t dodas
 
 windows-build:
-	env GOOS=windows $(GOBUILD) -o $(BINARY_NAME).exe -v
+	env GOOS=windows CGO_ENABLED=0 $(GOBUILD) -o $(BINARY_NAME).exe -v
 
 macos-build:
-	env GOOS=darwin $(GOBUILD) -o $(BINARY_NAME)_osx -v
+	env GOOS=darwin CGO_ENABLED=0 $(GOBUILD) -o $(BINARY_NAME)_osx -v
 
 gensrc:
 	rm -f $(VERSIONFILE)

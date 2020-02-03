@@ -10,7 +10,6 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.6.2
 	golang.org/x/crypto v0.0.0-20200128174031-69ecbb4d6d5d
-	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
 	gopkg.in/yaml.v1 v1.0.0-20140924161607-9f9df34309c0 // indirect
 	gopkg.in/yaml.v2 v2.2.8
 )

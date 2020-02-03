@@ -30,7 +30,6 @@ dodas [flags]
 
 ### SEE ALSO
 
-* [dodas app](dodas_app.md)	 - A brief description of your command
 * [dodas autocomplete](dodas_autocomplete.md)	 - Generate script for bash autocomplete
 * [dodas create](dodas_create.md)	 - Create a cluster from a TOSCA template
 * [dodas destroy](dodas_destroy.md)	 - Destroy infrastructure with this InfID
