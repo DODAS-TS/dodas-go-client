@@ -24,9 +24,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/spf13/cobra"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/terminal"
-	"github.com/spf13/cobra"
 )
 
 // getKey extract key from returned string
@@ -92,7 +92,7 @@ var loginCmd = &cobra.Command{
 
 		req.Header.Set("Content-Type", "application/json")
 
-		authHeader := PrepareAuthHeaders(clientConf)
+		authHeader := clientConf.PrepareAuthHeaders()
 
 		req.Header.Set("Authorization", authHeader)
 

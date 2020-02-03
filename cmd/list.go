@@ -36,7 +36,7 @@ func GetVMs(infID string) ([]string, error) {
 
 	req.Header.Set("Content-Type", "application/json")
 
-	authHeader := PrepareAuthHeaders(clientConf)
+	authHeader := clientConf.PrepareAuthHeaders()
 
 	req.Header.Set("Authorization", authHeader)
 
@@ -82,52 +82,18 @@ var infIDsCmd = &cobra.Command{
 	Short: "List Infrastructure IDs owned by the current client",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("infIDs called")
+		//fmt.Println("infIDs called")
 		///fmt.Println(string(template))
-		client := &http.Client{
-			Timeout: 300 * time.Second,
-		}
-		fmt.Println("Submitting request to  : ", clientConf.Im.Host)
 
-		req, err := http.NewRequest("GET", string(clientConf.Im.Host), nil)
-
-		req.Header.Set("Content-Type", "application/json")
-
-		authHeader := PrepareAuthHeaders(clientConf)
-
-		req.Header.Set("Authorization", authHeader)
-
-		var request []string
-		for name, headers := range req.Header {
-			name = strings.ToLower(name)
-			for _, h := range headers {
-				request = append(request, fmt.Sprintf("%v: %v", name, h))
-			}
-		}
-
-		request = append(request, fmt.Sprint("\n"))
-		//fmt.Printf(strings.Join(request, "\n"))
-
-		resp, err := client.Do(req)
+		listIDs, err := clientConf.ListInfIDs()
 		if err != nil {
 			panic(err)
 		}
 
-		body, _ := ioutil.ReadAll(resp.Body)
-
-		// TODO: use JSON!
-		stringList := strings.Split(string(body), "\n")
-
 		fmt.Print("Infrastructure IDs:\n")
-		for _, str := range stringList {
-			stringSplit := strings.Split(str, "/")
-
-			if resp.StatusCode == 200 {
-				fmt.Println(stringSplit[len(stringSplit)-1])
-			} else {
-				fmt.Println("ERROR:\n", string(body))
-				return
-			}
+		for _, str := range listIDs {
+			sl := strings.Split(str["uri"], "/")
+			fmt.Println(sl[len(sl)-1])
 		}
 	},
 }
@@ -155,7 +121,7 @@ var infosCmd = &cobra.Command{
 
 			req.Header.Set("Content-Type", "application/json")
 
-			authHeader := PrepareAuthHeaders(clientConf)
+			authHeader := clientConf.PrepareAuthHeaders()
 
 			req.Header.Set("Authorization", authHeader)
 

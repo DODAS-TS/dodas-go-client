@@ -28,7 +28,7 @@ var destroyCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, inf := range args {
 			infID = inf
-			err := clientConf.DestroyInf(string(clientConf.Im.Host), infID)
+			err := clientConf.DestroyInf(infID)
 			if err != nil {
 				panic(err)
 			}

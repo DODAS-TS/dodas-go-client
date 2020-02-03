@@ -46,7 +46,7 @@ var outputCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("status called")
 
-		outputs, err := clientConf.GetInfOutputs(string(clientConf.Im.Host), string(args[0]))
+		outputs, err := clientConf.GetInfOutputs(string(args[0]))
 		if err != nil {
 			panic(err)
 		}
@@ -66,7 +66,7 @@ var statusCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("status called")
-		authHeader := PrepareAuthHeaders(clientConf)
+		authHeader := clientConf.PrepareAuthHeaders()
 
 		request := Request{
 			URL:         string(clientConf.Im.Host) + "/" + string(args[0]) + "/contmsg",
@@ -104,7 +104,7 @@ var vmstatusCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("vmstatus called")
 
-		status, err := clientConf.GetInfVMStates(string(clientConf.Im.Host), string(args[0]), string(args[1]))
+		status, err := clientConf.GetInfVMStates(string(args[0]), string(args[1]))
 		if err != nil {
 			panic(err)
 		}
@@ -153,7 +153,7 @@ var vmCmd = &cobra.Command{
 		}
 		vm := listVMs[vmID]
 
-		authHeader := PrepareAuthHeaders(clientConf)
+		authHeader := clientConf.PrepareAuthHeaders()
 		request := Request{
 			URL:         vm,
 			RequestType: "GET",

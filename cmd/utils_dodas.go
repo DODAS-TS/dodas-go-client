@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/url"
 	"strings"
 
 	"github.com/dciangot/toscalib"
@@ -18,6 +17,11 @@ type RefreshRequest struct {
 	ClientSecret string
 	RefreshToken string
 	AccessToken  string
+}
+
+// ListIDStruct ..
+type ListIDStruct struct {
+	InfIDs []map[string]string `json:"uri-list"`
 }
 
 // RefreshTokenStruct ..
@@ -37,12 +41,14 @@ type StatusStruct struct {
 }
 
 // CreateInf is a wrapper for Infrastructure creation
-func (clientConf Conf) CreateInf(imURL string, template []byte) (infID string, err error) {
+func (clientConf Conf) CreateInf(template []byte) (infID string, err error) {
 
-	authHeader := PrepareAuthHeaders(clientConf)
+	//fmt.Printf("Using access token: %s", clientConf.Im.Token)
+
+	authHeader := clientConf.PrepareAuthHeaders()
 
 	request := Request{
-		URL:         string(clientConf.Im.Host),
+		URL:         clientConf.Im.Host,
 		RequestType: "POST",
 		Headers: map[string]string{
 			"Authorization": authHeader,
@@ -70,11 +76,11 @@ func (clientConf Conf) CreateInf(imURL string, template []byte) (infID string, e
 }
 
 // DestroyInf is a wrapper for Infrastructure creation
-func (clientConf Conf) DestroyInf(imURL string, infID string) error {
-	authHeader := PrepareAuthHeaders(clientConf)
+func (clientConf Conf) DestroyInf(infID string) error {
+	authHeader := clientConf.PrepareAuthHeaders()
 
 	request := Request{
-		URL:         imURL + "/" + infID,
+		URL:         clientConf.Im.Host + "/" + infID,
 		RequestType: "DELETE",
 		Headers: map[string]string{
 			"Authorization": authHeader,
@@ -98,11 +104,11 @@ func (clientConf Conf) DestroyInf(imURL string, infID string) error {
 }
 
 // GetInfOutputs get ...
-func (clientConf Conf) GetInfOutputs(imURL string, infID string) (outputs map[string]string, err error) {
-	authHeader := PrepareAuthHeaders(clientConf)
+func (clientConf Conf) GetInfOutputs(infID string) (outputs map[string]string, err error) {
+	authHeader := clientConf.PrepareAuthHeaders()
 
 	request := Request{
-		URL:         imURL + "/" + infID + "/outputs",
+		URL:         clientConf.Im.Host + "/" + infID + "/outputs",
 		RequestType: "GET",
 		Headers: map[string]string{
 			"Authorization": authHeader,
@@ -131,11 +137,11 @@ func (clientConf Conf) GetInfOutputs(imURL string, infID string) (outputs map[st
 }
 
 // GetInfVMStates get ...
-func (clientConf Conf) GetInfVMStates(imURL string, infID string, vm string) (status string, err error) {
-	authHeader := PrepareAuthHeaders(clientConf)
+func (clientConf Conf) GetInfVMStates(infID string, vm string) (status string, err error) {
+	authHeader := clientConf.PrepareAuthHeaders()
 
 	request := Request{
-		URL:         imURL + "/" + infID + "/vms/" + vm + "/contmsg",
+		URL:         clientConf.Im.Host + "/" + infID + "/vms/" + vm + "/contmsg",
 		RequestType: "GET",
 		Headers: map[string]string{
 			"Authorization": authHeader,
@@ -164,103 +170,46 @@ func (clientConf Conf) GetInfVMStates(imURL string, infID string, vm string) (st
 	return bodyJSON.Status, nil
 }
 
-// GetAccessToken ..
-func (clientConf Conf) GetAccessToken(refreshToken string) (token string, err error) {
-
-	clientID := clientConf.AllowRefresh.ClientID
-	clientSecret := clientConf.AllowRefresh.ClientSecret
-	IAMTokenEndpoint := clientConf.AllowRefresh.IAMTokenEndpoint
-
-	v := url.Values{}
-
-	v.Set("client_id", clientID)
-	v.Set("client_secret", clientSecret)
-	v.Set("grant_type", "refresh_token")
-	v.Set("refresh_token", refreshToken)
+// ListInfIDs ..
+func (clientConf Conf) ListInfIDs() (infIDs []map[string]string, err error) {
+	authHeader := clientConf.PrepareAuthHeaders()
 
 	request := Request{
-		URL:         IAMTokenEndpoint,
-		RequestType: "POST",
+		URL:         clientConf.Im.Host,
+		RequestType: "GET",
 		Headers: map[string]string{
-			"Content-Type": "application/x-www-form-urlencoded",
+			"Authorization": authHeader,
+			"Accept":        "application/json",
 		},
-		AuthUser: clientID,
-		AuthPwd:  clientSecret,
-		Content:  []byte(v.Encode()),
 	}
 
 	body, statusCode, err := MakeRequest(request)
 	if err != nil {
-		return "", err
+		return []map[string]string{}, err
 	}
 
 	if statusCode != 200 {
 		fmt.Println("ERROR:\n", string(body))
-		return "", err
+		return []map[string]string{}, err
 	}
 
-	var bodyJSON RefreshTokenStruct
+	var bodyJSON ListIDStruct
 
 	//fmt.Println(string(body))
 	err = json.Unmarshal(body, &bodyJSON)
 	if err != nil {
-		return "", err
+		return []map[string]string{}, err
 	}
 
-	return bodyJSON.AccessToken, nil
-}
+	infIDs = bodyJSON.InfIDs
 
-// GetRefreshToken ..
-func (clientConf Conf) GetRefreshToken() (RefreshToken string, err error) {
-
-	clientID := clientConf.AllowRefresh.ClientID
-	clientSecret := clientConf.AllowRefresh.ClientSecret
-	IAMTokenEndpoint := clientConf.AllowRefresh.IAMTokenEndpoint
-	accessToken := clientConf.Im.Token
-
-	v := url.Values{}
-
-	v.Set("client_id", clientID)
-	v.Set("client_secret", clientSecret)
-	v.Set("grant_type", "urn:ietf:params:oauth:grant-type:token-exchange")
-	v.Set("subject_token", accessToken)
-
-	request := Request{
-		URL:         IAMTokenEndpoint,
-		RequestType: "POST",
-		Headers: map[string]string{
-			"Content-Type": "application/x-www-form-urlencoded",
-		},
-		AuthUser: clientID,
-		AuthPwd:  clientSecret,
-		Content:  []byte(v.Encode()),
-	}
-
-	body, statusCode, err := MakeRequest(request)
-	if err != nil {
-		return "", err
-	}
-
-	if statusCode != 200 {
-		fmt.Printf("Error code %d: %s\n", statusCode, string(body))
-		return "", err
-	}
-
-	var bodyJSON RefreshTokenStruct
-
-	//fmt.Println(string(body))
-	err = json.Unmarshal(body, &bodyJSON)
-	if err != nil {
-		return "", err
-	}
-
-	return bodyJSON.RefreshToken, nil
+	return infIDs, nil
 }
 
 // UpdateInf ..
-func (clientConf Conf) UpdateInf(imURL string, infID string, template []byte) error {
+func (clientConf Conf) UpdateInf(infID string, template []byte) error {
 
-	authHeader := PrepareAuthHeaders(clientConf)
+	authHeader := clientConf.PrepareAuthHeaders()
 
 	request := Request{
 		URL:         string(clientConf.Im.Host) + "/" + infID,

@@ -28,7 +28,7 @@ var updateCmd = &cobra.Command{
 		}
 
 		fmt.Printf("Updating infID %s with: %s \n", args[0], args[1])
-		err = clientConf.UpdateInf(string(clientConf.Im.Host), args[0], template)
+		err = clientConf.UpdateInf(args[0], template)
 		if err != nil {
 			panic(err)
 		}

@@ -13,8 +13,10 @@ im:
     type: InfrastructureManager
     host: https://im-dodas.cloud.cnaf.infn.it/infrastructures
     token: < PUT HERE YOUR IAM TOKEN >
-allowrefresh:
-    client_id: < YOUR EXCHANGE TOKEN CLIENT ID >
-    client_secret: < YOUR EXCHANGE TOKEN CLIENT SECRET >
-    iam_endpoint: https://dodas-iam.cloud.cnaf.infn.it/token
-    dump_file: /tmp/.refresh_token
+## Uncomment this if you have an IAM exchange token client
+#allowrefresh:
+#    client_id: < YOUR EXCHANGE TOKEN CLIENT ID >
+#    client_secret: < YOUR EXCHANGE TOKEN CLIENT SECRET >
+#    iam_endpoint: https://dodas-iam.cloud.cnaf.infn.it/token
+#    refresh_file: /tmp/.refresh_token
+#    access_file: /tmp/.access_token

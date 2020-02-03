@@ -56,10 +56,11 @@ var createCmd = &cobra.Command{
 				panic(err)
 			}
 
-			_, err = clientConf.CreateInf(string(clientConf.Im.Host), template)
+			_, err = clientConf.CreateInf(template)
 			if err != nil {
 				panic(err)
 			}
+
 		}
 	},
 }

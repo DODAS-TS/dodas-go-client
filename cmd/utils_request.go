@@ -42,7 +42,7 @@ func validateRequest(r Request) (Request, error) {
 }
 
 // PrepareAuthHeaders ..
-func PrepareAuthHeaders(clientConf Conf) string {
+func (clientConf Conf) PrepareAuthHeaders() string {
 
 	var authHeaderCloudList []string
 

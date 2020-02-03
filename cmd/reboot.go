@@ -28,7 +28,7 @@ var rebootCmd = &cobra.Command{
 
 		req.Header.Set("Content-Type", "application/json")
 
-		authHeader := PrepareAuthHeaders(clientConf)
+		authHeader := clientConf.PrepareAuthHeaders()
 
 		req.Header.Set("Authorization", authHeader)
 

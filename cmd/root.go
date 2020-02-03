@@ -19,6 +19,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"regexp"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
@@ -61,7 +62,8 @@ type TokenRefreshConf struct {
 	ClientID         string `yaml:"client_id"`
 	ClientSecret     string `yaml:"client_secret"`
 	IAMTokenEndpoint string `yaml:"iam_endpoint"`
-	DumpFile         string `yaml:"dump_file"`
+	RefreshTokenFile string `yaml:"refresh_file"`
+	AccessTokenFile  string `yaml:"access_file"`
 }
 
 // Conf ..
@@ -85,6 +87,38 @@ func (c *Conf) getConf(path string) *Conf {
 		panic(err)
 	}
 
+	// if access token is dumped use it
+	isTokenUsed := (clientConf.Im.Token != "" || clientConf.Cloud.AuthVersion == "3.x_oidc_access_token")
+	isRefreshSet := clientConf.AllowRefresh.IAMTokenEndpoint != ""
+
+	if isTokenUsed && isRefreshSet {
+		tokenBytes, err := ioutil.ReadFile(clientConf.AllowRefresh.AccessTokenFile)
+		if err != nil {
+			fmt.Printf("Failed to read access token file %s, not going to use cache tokens: %s", clientConf.AllowRefresh.AccessTokenFile, err.Error())
+			return c
+		}
+
+		if clientConf.Cloud.AuthVersion == "3.x_oidc_access_token" {
+			c.Cloud.Password = string(tokenBytes)
+		}
+		if clientConf.Im.Token != "" {
+			c.Im.Token = string(tokenBytes)
+		}
+
+		_, err = clientConf.ListInfIDs()
+		if err != nil {
+			re := regexp.MustCompile(`^.*OIDC auth Token expired`)
+			if re.Match([]byte(err.Error())) {
+
+				fmt.Printf("Token expired, trying to refresh the token ")
+
+				clientConf, err = clientConf.GetNewToken()
+				if err != nil {
+					panic(err)
+				}
+			}
+		}
+	}
 	//fmt.Printf("--- c.im:\n%v\n\n", string(c.Im.Host))
 
 	return c
