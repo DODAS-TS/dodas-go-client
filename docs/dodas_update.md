@@ -1,20 +1,19 @@
-## dodas create
+## dodas update
 
-Create a cluster from a TOSCA template
+Update the number of vms to satisfy the new template
 
 ### Synopsis
 
-
-
+Update the number of vms to satisfy the new template
 
 ```
-dodas create <Template1> ... <TemplateN> [flags]
+dodas update <infID> <template> [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for create
+  -h, --help   help for update
 ```
 
 ### Options inherited from parent commands
