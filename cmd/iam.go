@@ -168,7 +168,7 @@ var initCmd = &cobra.Command{
 			panic(fmt.Errorf("Error: access token not specified to IM"))
 		}
 
-		if err := ioutil.WriteFile(clientConf.AllowRefresh.AccessTokenFile, []byte(clientConf.Im.Token), os.FileMode(6000)); err != nil {
+		if err := ioutil.WriteFile(clientConf.AllowRefresh.AccessTokenFile, []byte(clientConf.Im.Token), os.FileMode(int(0600))); err != nil {
 			log.Fatal(err)
 		}
 
@@ -178,7 +178,7 @@ var initCmd = &cobra.Command{
 		}
 		fmt.Printf("Got refresh token: %s", token)
 
-		if err := ioutil.WriteFile(clientConf.AllowRefresh.RefreshTokenFile, []byte(token), os.FileMode(6000)); err != nil {
+		if err := ioutil.WriteFile(clientConf.AllowRefresh.RefreshTokenFile, []byte(token), os.FileMode(int(0600))); err != nil {
 			log.Fatal(err)
 		}
 

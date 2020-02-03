@@ -117,6 +117,12 @@ func (c *Conf) getConf(path string) *Conf {
 				if err != nil {
 					panic(err)
 				}
+
+				// Dump the new token
+				fmt.Printf("Saving new access token in %s \n", clientConf.AllowRefresh.AccessTokenFile)
+				if err := ioutil.WriteFile(clientConf.AllowRefresh.AccessTokenFile, []byte(clientConf.Im.Token), os.FileMode(int(0600))); err != nil {
+					log.Fatal(err)
+				}
 			}
 		}
 	}
