@@ -43,7 +43,7 @@ func (clientConf Conf) GetAccessToken(refreshToken string) (token string, err er
 
 	if statusCode != 200 {
 		fmt.Println("ERROR:\n", string(body))
-		return "", err
+		return "", fmt.Errorf("Error code %d: %s", statusCode, string(body))
 	}
 
 	var bodyJSON RefreshTokenStruct
@@ -119,7 +119,7 @@ func (clientConf Conf) GetRefreshToken() (RefreshToken string, err error) {
 
 	if statusCode != 200 {
 		fmt.Printf("Error code %d: %s\n", statusCode, string(body))
-		return "", err
+		return "", fmt.Errorf("Error code %d: %s", statusCode, string(body))
 	}
 
 	var bodyJSON RefreshTokenStruct

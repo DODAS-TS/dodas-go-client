@@ -54,7 +54,6 @@ func (clientConf Conf) CreateInf(template []byte) (infID string, err error) {
 			"Authorization": authHeader,
 			"Content-Type":  "text/yaml",
 		},
-		Content: []byte(template),
 	}
 
 	body, statusCode, err := MakeRequest(request)
