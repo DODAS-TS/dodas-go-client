@@ -384,40 +384,40 @@
 <p><a href="https://travis-ci.org/DODAS-TS/dodas-go-client"><img alt="Build Status" src="https://travis-ci.org/DODAS-TS/dodas-go-client.svg?branch=master" /></a></p>
 <h2 id="installation-and-usage">Installation and usage</h2>
 <p>Download the binary from the latest release on <a href="https://github.com/DODAS-TS/dodas-go-client/releases">github</a>. For instance:</p>
-<pre><code class="bash">wget https://github.com/DODAS-TS/dodas-go-client/releases/download/v1.0.0-patch1/dodas.zip
+<div class="codehilite"><pre><span></span>wget https://github.com/DODAS-TS/dodas-go-client/releases/download/v1.0.0-patch1/dodas.zip
 unzip dodas.zip
 cp dodas /usr/local/bin
-</code></pre>
+</pre></div>
 
-<p>In alternative you can also run the dodas command inside the client container <code>dodasts/dodas-client:v1.0.0</code>.</p>
+<p>In alternative you can also run the dodas command inside the client container <code class="codehilite">dodasts/dodas-client:v1.0.0</code>.</p>
 <blockquote>
 <p><strong>CLI autocomplete</strong></p>
 <p>Autocompletion for bash and zsh is supported</p>
 <ul>
-<li><strong>bash</strong> add the following line to ~/.bashrc: <code>. &lt;(dodas autocomplete)</code></li>
-<li><strong>zsh</strong> add the following line to ~/.zshrc: <code>source &lt;(dodas zsh-autocomplete)</code></li>
+<li><strong>bash</strong> add the following line to ~/.bashrc: <code class="codehilite">. &lt;(dodas autocomplete)</code></li>
+<li><strong>zsh</strong> add the following line to ~/.zshrc: <code class="codehilite">source &lt;(dodas zsh-autocomplete)</code></li>
 </ul>
 </blockquote>
-<p>You can find now a template for creating your client configuration file in <a href="https://raw.githubusercontent.com/DODAS-TS/dodas-go-client/master/config/client_config.yaml">config/client_config.yaml</a>. Note that by default the client will look for <code>$HOME/.dodas.yaml</code>.</p>
+<p>You can find now a template for creating your client configuration file in <a href="https://raw.githubusercontent.com/DODAS-TS/dodas-go-client/master/config/client_config.yaml">config/client_config.yaml</a>. Note that by default the client will look for <code class="codehilite">$HOME/.dodas.yaml</code>.</p>
 <p>Now you are ready to go. For instance you can validate a tosca template like this:</p>
-<pre><code class="bash">dodas validate --template tests/tosca/valid_template.yml
-</code></pre>
+<div class="codehilite"><pre><span></span>dodas validate --template tests/tosca/valid_template.yml
+</pre></div>
 
 <blockquote>
 <p><strong>Tip:</strong> you can find supported tosca templates for applications and k8s deployments on the <a href="https://github.com/DODAS-TS/dodas-templates">DODAS template repo</a></p>
 </blockquote>
 <p>or you can create a cluster through the InfrastructureManager configured in your configuration file:</p>
-<pre><code class="bash">dodas create --config my_client_conf.yaml my_template.yaml
-</code></pre>
+<div class="codehilite"><pre><span></span>dodas create --config my_client_conf.yaml my_template.yaml
+</pre></div>
 
 <p>To list the Infrastructure ID of all your deployments:</p>
-<pre><code class="bash">dodas list infIDs
-</code></pre>
+<div class="codehilite"><pre><span></span>dodas list infIDs
+</pre></div>
 
 <p>You can eventually login into a vm in created cluster that has a public IP address with:</p>
-<pre><code class="bash">dodas login &lt;infID&gt; &lt;vmID&gt;
-# e.g. dodas login cb585e5c-33b6-11ea-8776-0242ac150003 0
-</code></pre>
+<div class="codehilite"><pre><span></span>dodas login &lt;infID&gt; &lt;vmID&gt;
+<span class="c1"># e.g. dodas login cb585e5c-33b6-11ea-8776-0242ac150003 0</span>
+</pre></div>
 
 <h2 id="quick-start">Quick start</h2>
 <p>Your deployments will be created and managed by the <a href="https://www.grycap.upv.es/im/index.php">InfrastructureManager</a>(IM).
@@ -431,18 +431,18 @@ To start playing with DODAS please refer to this two quick start guides on the o
 <p>Therefore <strong>all the available applications can be installed as they are on top of any k8s instance with <a href="https://helm.sh/">Helm</a></strong></p>
 </blockquote>
 <h2 id="building-from-source">Building from source</h2>
-<p>To compile on a linux machine (go version that supports <code>go modules</code> is required for building from source: e.g. &gt;= v1.12):</p>
-<pre><code class="bash">make build
-</code></pre>
+<p>To compile on a linux machine (go version that supports <code class="codehilite">go modules</code> is required for building from source: e.g. &gt;= v1.12):</p>
+<div class="codehilite"><pre><span></span>make build
+</pre></div>
 
 <p>while to compile with Docker:</p>
-<pre><code class="bash">make docker-build
-</code></pre>
+<div class="codehilite"><pre><span></span>make docker-build
+</pre></div>
 
 <p>It's also possible to cross compile for windows and macOS with:</p>
-<pre><code class="bash">make windows-build
+<div class="codehilite"><pre><span></span>make windows-build
 make macos-build
-</code></pre>
+</pre></div>
 
 <h2 id="contributing">Contributing</h2>
 <p>If you want to contribute:</p>
@@ -455,7 +455,7 @@ make macos-build
 <h2 id="contact-us">Contact us</h2>
 <p>DODAS Team provides two support channels, email and Slack channel.</p>
 <ul>
-<li><strong>mailing list</strong>: send a message to the following list dodas-support@lists.infn.it</li>
+<li><strong>mailing list</strong>: send a message to the following list <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#111;&#100;&#97;&#115;&#45;&#115;&#117;&#112;&#112;&#111;&#114;&#116;&#64;&#108;&#105;&#115;&#116;&#115;&#46;&#105;&#110;&#102;&#110;&#46;&#105;&#116;">&#100;&#111;&#100;&#97;&#115;&#45;&#115;&#117;&#112;&#112;&#111;&#114;&#116;&#64;&#108;&#105;&#115;&#116;&#115;&#46;&#105;&#110;&#102;&#110;&#46;&#105;&#116;</a></li>
 <li><strong>slack channel</strong>: join us on <a href="https://dodas-infn.slack.com/archives/CAJ6VG71A">Slack Channel</a></li>
 </ul>
                 
@@ -508,6 +508,15 @@ make macos-build
           Material for MkDocs</a>
       </div>
       
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/DODAS-TS" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://dodas-infn.slack.com/archives/CAJ6VG71A" class="md-footer-social__link fa fa-slack"></a>
+    
+  </div>
+
     </div>
   </div>
 </footer>
