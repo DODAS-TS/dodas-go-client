@@ -49,9 +49,14 @@ func getKey(asciiBody string) (string, error) {
 func getPubIP(asciiBody string) (string, error) {
 
 	stringList := strings.Split(asciiBody, "net_interface.1.ip = '")
-
 	if len(stringList) < 2 {
-		return "", fmt.Errorf("Cannot find a public IP for this machine")
+		stringList = strings.Split(asciiBody, "net_interface.2.ip = '")
+		if len(stringList) < 2 {
+			stringList = strings.Split(asciiBody, "net_interface.3.ip = '")
+			if len(stringList) < 2 {
+				return "", fmt.Errorf("Cannot find a public IP for this machine")
+			}
+		}
 	}
 
 	partialString := stringList[1]
