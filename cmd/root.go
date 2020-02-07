@@ -5,9 +5,55 @@ import (
 	"log"
 	"os"
 
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
+	"github.com/spf13/viper"
+	"k8s.io/client-go/kubernetes"
+
+	"github.com/dodas-ts/dodas-go-client/pkg/utils"
 )
+
+var (
+	version      bool
+	cfgFile      string
+	templateFile string
+	infID        string
+	clientset    *kubernetes.Clientset
+	kubeconfig   string
+	clientConf   utils.Conf
+)
+
+func initConfig() {
+	if cfgFile != "" {
+		// Use config file from the flag.
+		viper.SetConfigFile(cfgFile)
+	} else {
+		// Find home directory.
+		home, err := homedir.Dir()
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		//fmt.Println(home)
+
+		// Search config in home directory with name ".dodas_go_client" (without extension).
+		viper.AddConfigPath(home)
+		viper.SetConfigName(".dodas")
+	}
+
+	viper.AutomaticEnv() // read in environment variables that match
+
+	// If a config file is found, read it in.
+	if err := viper.ReadInConfig(); err == nil {
+		//fmt.Println("Using config file:", viper.ConfigFileUsed())
+		clientConf = clientConf.GetConf(viper.ConfigFileUsed())
+		//if clientConf.im.Password == "" {
+		//	fmt.Println("No password")
+		//}
+	}
+
+}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -54,7 +100,7 @@ func BuildDoc() {
 }
 
 func init() {
-	cobra.OnInitialize(InitConfig)
+	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,

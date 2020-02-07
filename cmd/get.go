@@ -22,6 +22,8 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
+
+	"github.com/dodas-ts/dodas-go-client/pkg/utils"
 )
 
 var debug bool
@@ -68,7 +70,7 @@ var statusCmd = &cobra.Command{
 		fmt.Println("status called")
 		authHeader := clientConf.PrepareAuthHeaders()
 
-		request := Request{
+		request := utils.Request{
 			URL:         string(clientConf.Im.Host) + "/" + string(args[0]) + "/contmsg",
 			RequestType: "GET",
 			Headers: map[string]string{
@@ -77,7 +79,7 @@ var statusCmd = &cobra.Command{
 			},
 		}
 
-		body, statusCode, err := MakeRequest(request)
+		body, statusCode, err := utils.MakeRequest(request)
 		if err != nil {
 			panic(err)
 		}
@@ -154,7 +156,7 @@ var vmCmd = &cobra.Command{
 		vm := listVMs[vmID]
 
 		authHeader := clientConf.PrepareAuthHeaders()
-		request := Request{
+		request := utils.Request{
 			URL:         vm,
 			RequestType: "GET",
 			Headers: map[string]string{
@@ -163,7 +165,7 @@ var vmCmd = &cobra.Command{
 			},
 		}
 
-		body, statusCode, err := MakeRequest(request)
+		body, statusCode, err := utils.MakeRequest(request)
 		if err != nil {
 			panic(err)
 		}

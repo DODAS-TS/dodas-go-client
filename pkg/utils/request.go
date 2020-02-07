@@ -1,4 +1,4 @@
-package cmd
+package utils
 
 import (
 	"fmt"
@@ -9,6 +9,21 @@ import (
 	"strings"
 	"time"
 )
+
+// DecodeFields ..
+var DecodeFields = map[string]string{
+	"ID":            "id",
+	"Type":          "type",
+	"Username":      "username",
+	"Password":      "password",
+	"Token":         "token",
+	"Host":          "host",
+	"Tenant":        "tenant",
+	"AuthURL":       "auth_url",
+	"AuthVersion":   "auth_version",
+	"Domain":        "domain",
+	"ServiceRegion": "service_region",
+}
 
 // Request input struct
 type Request struct {
@@ -42,7 +57,7 @@ func validateRequest(r Request) (Request, error) {
 }
 
 // PrepareAuthHeaders ..
-func (clientConf Conf) PrepareAuthHeaders() string {
+func (clientConf *Conf) PrepareAuthHeaders() string {
 
 	var authHeaderCloudList []string
 
@@ -54,7 +69,7 @@ func (clientConf Conf) PrepareAuthHeaders() string {
 		value := values.Field(i)
 
 		if value.Interface() != "" {
-			keyTemp := fmt.Sprintf("%v = %v", decodeFields[field.Name], value)
+			keyTemp := fmt.Sprintf("%v = %v", DecodeFields[field.Name], value)
 			authHeaderCloudList = append(authHeaderCloudList, keyTemp)
 		}
 	}
@@ -68,10 +83,10 @@ func (clientConf Conf) PrepareAuthHeaders() string {
 
 	for i := 0; i < fields.NumField(); i++ {
 		field := fields.Field(i)
-		if decodeFields[field.Name] != "host" {
+		if DecodeFields[field.Name] != "host" {
 			value := values.Field(i)
 			if value.Interface() != "" {
-				keyTemp := fmt.Sprintf("%v = %v", decodeFields[field.Name], value.Interface())
+				keyTemp := fmt.Sprintf("%v = %v", DecodeFields[field.Name], value.Interface())
 				authHeaderIMList = append(authHeaderIMList, keyTemp)
 			}
 		}

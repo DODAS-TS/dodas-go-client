@@ -1,4 +1,4 @@
-package cmd
+package utils
 
 import (
 	"bytes"
@@ -41,7 +41,7 @@ type StatusStruct struct {
 }
 
 // CreateInf is a wrapper for Infrastructure creation
-func (clientConf Conf) CreateInf(template []byte) (infID string, err error) {
+func (clientConf *Conf) CreateInf(template []byte) (infID string, err error) {
 
 	//fmt.Printf("Using access token: %s", clientConf.Im.Token)
 
@@ -54,6 +54,7 @@ func (clientConf Conf) CreateInf(template []byte) (infID string, err error) {
 			"Authorization": authHeader,
 			"Content-Type":  "text/yaml",
 		},
+		Content: template,
 	}
 
 	body, statusCode, err := MakeRequest(request)
@@ -75,7 +76,7 @@ func (clientConf Conf) CreateInf(template []byte) (infID string, err error) {
 }
 
 // DestroyInf is a wrapper for Infrastructure creation
-func (clientConf Conf) DestroyInf(infID string) error {
+func (clientConf *Conf) DestroyInf(infID string) error {
 	authHeader := clientConf.PrepareAuthHeaders()
 
 	request := Request{
@@ -103,7 +104,7 @@ func (clientConf Conf) DestroyInf(infID string) error {
 }
 
 // GetInfOutputs get ...
-func (clientConf Conf) GetInfOutputs(infID string) (outputs map[string]string, err error) {
+func (clientConf *Conf) GetInfOutputs(infID string) (outputs map[string]string, err error) {
 	authHeader := clientConf.PrepareAuthHeaders()
 
 	request := Request{
@@ -136,7 +137,7 @@ func (clientConf Conf) GetInfOutputs(infID string) (outputs map[string]string, e
 }
 
 // GetInfVMStates get ...
-func (clientConf Conf) GetInfVMStates(infID string, vm string) (status string, err error) {
+func (clientConf *Conf) GetInfVMStates(infID string, vm string) (status string, err error) {
 	authHeader := clientConf.PrepareAuthHeaders()
 
 	request := Request{
@@ -170,7 +171,7 @@ func (clientConf Conf) GetInfVMStates(infID string, vm string) (status string, e
 }
 
 // ListInfIDs ..
-func (clientConf Conf) ListInfIDs() (infIDs []map[string]string, err error) {
+func (clientConf *Conf) ListInfIDs() (infIDs []map[string]string, err error) {
 	authHeader := clientConf.PrepareAuthHeaders()
 
 	request := Request{
@@ -205,7 +206,7 @@ func (clientConf Conf) ListInfIDs() (infIDs []map[string]string, err error) {
 }
 
 // UpdateInf ..
-func (clientConf Conf) UpdateInf(infID string, template []byte) error {
+func (clientConf *Conf) UpdateInf(infID string, template []byte) error {
 
 	authHeader := clientConf.PrepareAuthHeaders()
 
@@ -237,7 +238,7 @@ func (clientConf Conf) UpdateInf(infID string, template []byte) error {
 }
 
 // Validate TOSCA template
-func (clientConf Conf) Validate(template []byte) error {
+func (clientConf *Conf) Validate(template []byte) error {
 	fmt.Println("validate called")
 	var t toscalib.ServiceTemplateDefinition
 

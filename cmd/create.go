@@ -21,20 +21,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var decodeFields = map[string]string{
-	"ID":            "id",
-	"Type":          "type",
-	"Username":      "username",
-	"Password":      "password",
-	"Token":         "token",
-	"Host":          "host",
-	"Tenant":        "tenant",
-	"AuthURL":       "auth_url",
-	"AuthVersion":   "auth_version",
-	"Domain":        "domain",
-	"ServiceRegion": "service_region",
-}
-
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create <Template1> ... <TemplateN>",
