@@ -19,7 +19,7 @@ export GOARCH=amd64
 all: build test
 
 build:
-	env $(GOBUILD) -o $(BINARY_NAME)
+	$(GOBUILD) -o $(BINARY_NAME)
 
 build-debug:
 	env CGO_ENABLED=0 $(GOBUILD_DBG) -o $(BINARY_NAME) -v
