@@ -6,10 +6,10 @@ require (
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
-	github.com/blang/semver v3.5.1+incompatible // indirect
+	github.com/blang/semver v3.5.1+incompatible
 	github.com/dciangot/toscalib v0.0.0-20190329085732-12f4d4a283e4
 	github.com/huandu/xstrings v1.3.0 // indirect
-	github.com/kenjones-cisco/mergo v0.0.0-20161024152414-0149f50ea824 // indirect
+	github.com/kenjones-cisco/mergo v0.0.0-20161024152414-0149f50ea824
 	github.com/mitchellh/copystructure v1.0.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/spf13/cobra v0.0.5
@@ -17,6 +17,7 @@ require (
 	github.com/spf13/viper v1.6.2
 	golang.org/x/crypto v0.0.0-20200128174031-69ecbb4d6d5d
 	golang.org/x/sys v0.0.0-20190826190057-c7b8b68b1456 // indirect
+	golang.org/x/tools v0.0.0-20190328211700-ab21143f2384
 	gopkg.in/yaml.v1 v1.0.0-20140924161607-9f9df34309c0 // indirect
 	gopkg.in/yaml.v2 v2.2.8
 	k8s.io/api v0.17.2 // indirect

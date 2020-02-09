@@ -3,7 +3,6 @@ package utils
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"regexp"
 
@@ -53,18 +52,12 @@ type Conf struct {
 // GetConf ..
 func (clientConf Conf) GetConf(path string) Conf {
 
-	c := Conf{
-		Im:           ConfIM{},
-		Cloud:        ConfCloud{},
-		AllowRefresh: TokenRefreshConf{},
-	}
-
 	f, err := ioutil.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
 
-	err = yaml.UnmarshalStrict(f, &c)
+	err = yaml.UnmarshalStrict(f, &clientConf)
 	if err != nil {
 		panic(err)
 	}
@@ -77,14 +70,14 @@ func (clientConf Conf) GetConf(path string) Conf {
 		tokenBytes, err := ioutil.ReadFile(clientConf.AllowRefresh.AccessTokenFile)
 		if err != nil {
 			fmt.Printf("Failed to read access token file %s, not going to use cache tokens: %s", clientConf.AllowRefresh.AccessTokenFile, err.Error())
-			return c
+			return clientConf
 		}
 
 		if clientConf.Cloud.AuthVersion == "3.x_oidc_access_token" {
-			c.Cloud.Password = string(tokenBytes)
+			clientConf.Cloud.Password = string(tokenBytes)
 		}
 		if clientConf.Im.Token != "" {
-			c.Im.Token = string(tokenBytes)
+			clientConf.Im.Token = string(tokenBytes)
 		}
 
 		_, err = clientConf.ListInfIDs()
@@ -103,12 +96,12 @@ func (clientConf Conf) GetConf(path string) Conf {
 				// Dump the new token
 				fmt.Printf("Saving new access token in %s \n", clientConf.AllowRefresh.AccessTokenFile)
 				if err := ioutil.WriteFile(clientConf.AllowRefresh.AccessTokenFile, []byte(clientConf.Im.Token), os.FileMode(int(0600))); err != nil {
-					log.Fatal(err)
+					panic(err)
 				}
 			}
 		}
 	}
 	//fmt.Printf("--- c.im:\n%v\n\n", string(c.Im.Host))
 
-	return c
+	return clientConf
 }

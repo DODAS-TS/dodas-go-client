@@ -48,6 +48,8 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		//fmt.Println("Using config file:", viper.ConfigFileUsed())
 		clientConf = clientConf.GetConf(viper.ConfigFileUsed())
+
+		//fmt.Printf("TOKEN: %s", clientConf.Im.Token)
 		//if clientConf.im.Password == "" {
 		//	fmt.Println("No password")
 		//}
