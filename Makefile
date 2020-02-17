@@ -29,6 +29,7 @@ doc:
 	BUILD_DOC=true ./$(BINARY_NAME)
 
 publish-doc:
+	cp README.md docs/README.md
 	$(DOCBIN) gh-deploy
 
 test: build
