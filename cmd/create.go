@@ -21,6 +21,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var validate bool
+
 // createCmd represents the create command
 var createCmd = &cobra.Command{
 	Use:   "create <Template1> ... <TemplateN>",
@@ -37,11 +39,12 @@ var createCmd = &cobra.Command{
 				panic(err)
 			}
 
-			err = clientConf.Validate(template)
-			if err != nil {
-				panic(err)
+			if validate {
+				err = clientConf.Validate(template)
+				if err != nil {
+					panic(err)
+				}
 			}
-
 			_, err = clientConf.CreateInf(template)
 			if err != nil {
 				panic(err)
@@ -55,7 +58,7 @@ func init() {
 
 	rootCmd.AddCommand(createCmd)
 	// Here you will define your flags and configuration settings.
-
+	createCmd.PersistentFlags().BoolVar(&validate, "validate", true, "Validate before submitting")
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// Cobra also supports local flags, which will only run

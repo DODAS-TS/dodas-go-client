@@ -6,15 +6,27 @@ type Voms struct {
 	Content string
 }
 
+// SlavesStruct ..
+type SlavesStruct struct {
+	SlaveNum   int
+	SlaveMemGB int
+	SlaveCPUs  int
+	OsImage    string
+}
+
 // CoDParams ..
 type CoDParams struct {
-	SlaveNum   int
-	ExternalIP string
-	VO         string
-	VomsFile   Voms
-	CacheCert  string
-	CacheKey   string
-	Redirector string
+	Slaves         SlavesStruct
+	GsiEnabled     bool
+	ExternalIP     string
+	VO             string
+	VomsFile       Voms
+	CacheCert      string
+	CacheKey       string
+	RedirectorHost string
+	RedirectorPort int
+	OriginHost     string
+	OriginPort     int
 }
 
 // CoDTemplate ..
@@ -44,7 +56,7 @@ topology_template:
 
     number_of_slaves:
       type: integer
-      default: {{ .SlaveNum }}
+      default: {{ .Slaves.SlaveNum }}
 
     num_cpus_slave: 
       type: integer
@@ -57,8 +69,8 @@ topology_template:
     server_image:
       type: string
       #default: "ost://openstack.fisica.unipg.it/cb87a2ac-5469-4bd5-9cce-9682c798b4e4"
-      #default: "ost://horizon.cloud.cnaf.infn.it/3d993ab8-5d7b-4362-8fd6-af1391edca39"
-      default: "ost://cloud.recas.ba.infn.it/1113d7e8-fc5d-43b9-8d26-61906d89d479"
+      default: "ost://horizon.cloud.cnaf.infn.it/3d993ab8-5d7b-4362-8fd6-af1391edca39"
+      #default: "ost://cloud.recas.ba.infn.it/1113d7e8-fc5d-43b9-8d26-61906d89d479"
 
     helm_cod_values: 
       type: string
@@ -68,7 +80,8 @@ topology_template:
           ips:
             - {{ .ExternalIP }}
         gsi:
-          enabled: true
+          enabled: {{ .GsiEnabled }}
+          {{- if .GsiEnabled }}
           vo: {{ .VO }}
           vomses:
           - filename: {{ .VomsFile.Name }}
@@ -76,10 +89,26 @@ topology_template:
           caCert:
             cert: | {{ .CacheCert | indent 14 }}
             key: | {{ .CacheKey | indent 14 }}
-
           proxy: true
+          {{- end }}
+
         cache:
-          redirHost: {{ .Redirector }}
+          {{- if .RedirectorHost }}
+          redirHost: {{ .RedirectorHost }}
+          {{- end }}
+          originHost: {{ .OriginHost }}
+          originXrdPort: {{ .OriginPort }}
+        redirector:
+          {{- if .RedirectorHost }}
+          enabled: false
+          {{- end}}
+          service:
+            cms:
+              port: {{ .RedirectorPort }}
+        proxy:
+          {{- if .RedirectorHost }}
+          enabled: false
+          {{- end}}
 
   node_templates:
 
@@ -163,5 +192,4 @@ topology_template:
   outputs:
     k8s_endpoint:
       value: { concat: [ 'https://', get_attribute: [ k3s_master_server, public_address, 0 ], ':30443' ] }
-
 `

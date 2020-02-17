@@ -10,7 +10,7 @@ github.com/blang/semver
 github.com/cpuguy83/go-md2man/md2man
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
-# github.com/dciangot/toscalib v0.0.0-20190329085732-12f4d4a283e4
+# github.com/dciangot/toscalib v0.0.0 => github.com/dciangot/toscalib v0.0.0-20200214150212-d0d4f8631683
 github.com/dciangot/toscalib
 # github.com/fsnotify/fsnotify v1.4.7
 github.com/fsnotify/fsnotify

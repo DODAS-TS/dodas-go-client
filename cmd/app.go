@@ -10,27 +10,23 @@ import (
 func MakeApps() *cobra.Command {
 	var command = &cobra.Command{
 		Use:   "app",
-		Short: "Install Kubernetes apps from helm charts or YAML files",
+		Short: "Install Kubernetes cluster and apps from helm charts or YAML files",
 		Long: `Install Kubernetes apps from helm charts or YAML files using the "install" 
-command. Helm 2 is used by default unless a --helm3 flag exists and is passed. 
-You can also find the post-install message for each app with the "info" 
 command.`,
-		Example: `  k3sup app install
-  k3sup app info inlets-operator`,
+		Example:      `  dodas app install`,
 		SilenceUsage: false,
 	}
 
 	var install = &cobra.Command{
 		Use:   "install",
-		Short: "Install a Kubernetes app",
-		Example: `  k3sup app install [APP]
-  k3sup app install openfaas --help
-  k3sup app install inlets-operator --token-file $HOME/do
-  k3sup app install --help`,
+		Short: "Install a DODAS cluster with Kubernetes apps",
+		Example: `  dodas app install [APP]
+  dodas app install cod --x509-cert $HOME/do
+  dodas app install --help`,
 		SilenceUsage: true,
 	}
 
-	install.PersistentFlags().String("kubeconfig", "kubeconfig", "Local path for your kubeconfig file")
+	//install.PersistentFlags().String("kubeconfig", "kubeconfig", "Local path for your kubeconfig file")
 
 	install.RunE = func(command *cobra.Command, args []string) error {
 

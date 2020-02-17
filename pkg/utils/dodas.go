@@ -240,6 +240,7 @@ func (clientConf *Conf) UpdateInf(infID string, template []byte) error {
 // Validate TOSCA template
 func (clientConf *Conf) Validate(template []byte) error {
 	fmt.Println("validate called")
+
 	var t toscalib.ServiceTemplateDefinition
 
 	err := t.Parse(bytes.NewBuffer(template))

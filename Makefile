@@ -49,6 +49,7 @@ install:
 
 tidy:
 	$(GOCMD) mod tidy
+	$(GOCMD) mod vendor
 
 docker-bin-build:
 	docker run --rm -it -v ${PWD}:/go -w /go/ golang:1.13.6 go build -mod vendor -o "$(BINARY_NAME)" -v
@@ -57,10 +58,10 @@ docker-img-build:
 	docker build . -t dodas
 
 windows-build:
-	env GOOS=windows CGO_ENABLED=0 $(GOBUILD) -o $(BINARY_NAME).exe -v
+	env GOOS=windows CGO_ENABLED=0 $(GOBUILD) -mod vendor -o $(BINARY_NAME).exe -v
 
 macos-build:
-	env GOOS=darwin CGO_ENABLED=0 $(GOBUILD) -o $(BINARY_NAME)_osx -v
+	env GOOS=darwin CGO_ENABLED=0 $(GOBUILD) -mod vendor -o $(BINARY_NAME)_osx -v
 
 gensrc:
 	rm -f $(VERSIONFILE)
