@@ -1,5 +1,9 @@
 # DODAS client
 
+<p align="center">
+<img src="https://github.com/DODAS-TS/dodas-templates/raw/master/logo.png" width="200" height="200" />
+</p>
+
 [![Build Status](https://travis-ci.org/DODAS-TS/dodas-go-client.svg?branch=master)](https://travis-ci.org/DODAS-TS/dodas-go-client)
 
 ## Installation and usage
