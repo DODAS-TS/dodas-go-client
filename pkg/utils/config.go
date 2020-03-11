@@ -70,6 +70,12 @@ func (clientConf Conf) GetConf(path string) Conf {
 		tokenBytes, err := ioutil.ReadFile(clientConf.AllowRefresh.AccessTokenFile)
 		if err != nil {
 			fmt.Printf("Failed to read access token file %s, not going to use cache tokens: %s", clientConf.AllowRefresh.AccessTokenFile, err.Error())
+			if clientConf.Im.Token != "" {
+				fmt.Printf("Saving access token from configfile %s \n", clientConf.AllowRefresh.AccessTokenFile)
+				if err := ioutil.WriteFile(clientConf.AllowRefresh.AccessTokenFile, []byte(clientConf.Im.Token), os.FileMode(int(0600))); err != nil {
+					panic(err)
+				}
+			}
 			return clientConf
 		}
 

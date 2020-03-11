@@ -47,6 +47,8 @@ func (clientConf *Conf) CreateInf(template []byte) (infID string, err error) {
 
 	authHeader := clientConf.PrepareAuthHeaders()
 
+	fmt.Printf("Header: %s", authHeader)
+
 	request := Request{
 		URL:         clientConf.Im.Host,
 		RequestType: "POST",
