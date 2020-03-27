@@ -61,9 +61,11 @@ func getPubIP(asciiBody string) (string, error) {
 
 	partialString := stringList[1]
 
-	pubIPTmp := strings.Split(partialString, "' and")[0]
+	pubIPTmp1 := strings.Split(partialString, "' and")[0]
+	pubIPTmp2 := strings.Split(pubIPTmp1, "'\n")[0]
+	pubIPTmp3 := strings.Split(pubIPTmp2, "' \n")[0]
 
-	return pubIPTmp, nil
+	return pubIPTmp3, nil
 }
 
 // loginCmd represets the login command
