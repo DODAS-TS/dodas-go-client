@@ -9,7 +9,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/cobra/doc"
 	"github.com/spf13/viper"
-	"k8s.io/client-go/kubernetes"
 
 	"github.com/dodas-ts/dodas-go-client/pkg/utils"
 )
@@ -19,9 +18,9 @@ var (
 	cfgFile      string
 	templateFile string
 	infID        string
-	clientset    *kubernetes.Clientset
-	kubeconfig   string
-	clientConf   utils.Conf
+	//clientset    *kubernetes.Clientset
+	kubeconfig string
+	clientConf utils.Conf
 )
 
 func initConfig() {
